@@ -7,9 +7,9 @@ Repositorio para proyecto del curso IE0217 - Estructuras Abstractas de Datos y A
 
     --------------MENU-----------------------------
 
-    1- Atencion Clientes
+    1- Atención Clientes
 
-    2- Informacion general sobre prestamos bancarios
+    2- Información general sobre prestamos bancarios
 
     3- Salir
 
@@ -26,23 +26,57 @@ Repositorio para proyecto del curso IE0217 - Estructuras Abstractas de Datos y A
 
 ## 2. Información general: Se deben desplegar las opciones predefinidas para préstamos personales, prendarios e hipotecarios, así como la opción de generar una tabla de pagos esperados para la opción elegida, donde el monto del préstamo es ingresado por el usuario. Además se debe dar la opción de obtener la tabla mediante valores personalizados de monto, cantidad de cuotas y la tasa de interés. **andres**
 
+Esto se puede implementar siempre que ya se haya seleccionado la opción  2 del menú principal, que corresponde a "Información general sobre prestamos bancarios".  
+
+Entonces, si se selecciona esta opción, se puede llevar a otro "submenu", donde hay opciones definidas en el sistema.  
+
+```
+--------------MENU-----------------------------
+
+    1- Atención Clientes
+
+    2- Información general sobre prestamos bancarios
+        1 - Préstamo Personal 
+        2- Préstamo Prendario 
+        3- Préstamo Hipotecario
+    3- Salir
+    --------------MENU----------------------------------
+```
+
+Acá, cada una de esas opciones generará una tabla de pagos esperados para el préstamo escogido, por lo que el pago correspondiente dependerá de la opción que el usuario eligió.
+
+
 ## 3. Cuentas bancarias: Un cliente puede poseer hasta dos cuentas bancarias, una en colones y otra en dólares, destinadas a gestionar sus ahorros con la entidad bancaria. Así como certi cados de depósito a plazo (CDP). **kevin**
 
 ## 4. Operaciones disponibles: Los clientes tienen la capacidad de realizar diversas operaciones, tales como depósitos, retiros, transferencias entre cuentas dirigidas a otros clientes, abonos a préstamos tanto propios como de otras personas, etc. **chris**
 
-    Igual se implementara con un menu ,segun sea para clientes o prestamos las operaciones seran funciones totalmente aparte donde las mismas haran todo tipo de operaciones CRUD en la base de datos, para las operaciones que sean distintas a las del propio clientes se crearan 2 funciones aparte donde las mismas tendran la cuenta destino donde se haran las transferencias tanto de prestamos como tranferencias normales y las mismas igualmente se realizaran bajo las operaciones disponibles en la base de datos.
+Se implementará con un menú, según sea para clientes o préstamos. Las operaciones serán funciones totalmente aparte, donde las mismas harán todo tipo de operaciones "CRUD" en la base de datos. Para las operaciones que sean distintas a las del propio cliente se crearán 2 funciones aparte, donde las mismas tendrán la cuenta destino donde se harán las transferencias, tanto de préstamos como tranferencias normales, y las mismas igualmente se realizarán bajo las operaciones disponibles en la base de datos.
 
 ## 5. Registro de transacciones: El sistema debe mantener un registro detallado de todas las transacciones realizadas, garantizando un seguimiento preciso de las operaciones efectuadas. **andres**
 
+Es como un tipo de "bitácora" de todas las operaciones que se han hecho a la cuenta, basadas en las operaciones que se describieron en el paso anterior. Esta bitácora puede ser almacenada como una tabla, guardando en una columna el tipo de operación que se realizó, en otra columna el monto con el que se hizo la operación, y en la última columna, la fecha en que se realizó dicha operación.
+
+```
+Operación   |   Monto    |    Fecha
+_____________________________________________
+ 
+Retiro      |    3000    |    1 - 1 - 2024
+Depósito    |    1000    |    2 - 1 - 2024
+Retiro      |    5000    |    3 - 1 - 2024
+Depósito    |    9000    |    4 - 1 - 2024
+Depósito    |    1000    |    5 - 1 - 2024
+
+```
+
 ## 6. Identicación de clientes: Cada cliente será identi cado mediante un número de identi cación único, el cual estará limitado a un número decimal entre 0 y 999999999. **kevin**
 
-## 7. Préstamos asociados: Los clientes pueden tener préstamos asociados, ya sea en colones o en dólares, cada uno con características especícas como la tasa de interés, el periodo en meses y la cuota mensual, las cuales estarán asociadas a valores previamente de nidos. **chris**
+## 7. Préstamos asociados: Los clientes pueden tener préstamos asociados, ya sea en colones o en dólares, cada uno con características específicas como la tasa de interés, el periodo en meses y la cuota mensual, las cuales estarán asociadas a valores previamente de nidos. **chris**
 
-Definicion de las caracterisiticas especificas de los prestamos
+Definición de las características específicas de los préstamos
 
-Tasa de interes: "La tasa de interés es un porcentaje de la operación que se realiza. Es un porcentaje que se traduce en un monto de dinero, mediante el cual se paga por el uso del dinero." Existen dos tasas de interes , el interes simple y el interes compuesto , el **interes simple** es calculado con la siguiente formula:
+Tasa de interés: "La tasa de interés es un porcentaje de la operación que se realiza. Es un porcentaje que se traduce en un monto de dinero, mediante el cual se paga por el uso del dinero." Existen dos tasas de interés, el interés simple y el interés compuesto , el **interés simple** es calculado con la siguiente ecuación:
 
-$ C_{n} = C_{0} * (1+(1*t)) $ 
+$C_{n} = C_{0} * (1+(1*t))$ 
 
 donde:
 
@@ -53,7 +87,7 @@ $C_{0}$ = monto inicial
 $t$ = numero de periodos
 
 
-Formula del interes compuesto:
+Ecuación del interés compuesto:
 
 $C_{n} = C_{0} * (1*n)^t$
 
@@ -67,13 +101,40 @@ $t$ = numero de periodos
 
 $n$ = interes
 
-Periodo de meses del prestamo: Cantidad de meses por el cual se va a estar pagando en su defecto el prestamo en su totalidad , ejemplo periodo de 24 meses , se tienen 24 meses para concluir con el pago del prestamo con todo e interes.
+Periodo de meses del préstamo: Cantidad de meses por el cual se va a estar pagando en su defecto el prestamo en su totalidad.  
+
+Ejemplo:  
+Periodo de 24 meses, se tienen 24 meses para concluir con el pago del prestamo con todo e interés.  
+
+Cuota mensual: Cuota que deberá pagar el cliente mes a mes para poder concluir la paga total del préstamo. Este mismo se extrae de la división del precio total del préstamo con interés, dividido con la cantidad de meses del periodo.
 
 
-cuota mensual: Cuota que debera pagar el cliente mes a mes para poder concluir la paga total del prestamo , esta misma se extrae de la division del precio total del prestamo con interes dividida con la cantidad de meses del periodo.
+## 8. Reporte de préstamos: Los clientes pueden solicitar un reporte de sus préstamos. El sistema debe generar un archivo de texto que detalle las cuotas pagadas, desglosando el aporte al capital y los intereses abonados hasta el momento. Este reporte puede presentarse en forma tabular. **andres**
+Se puede trabajar creando una opción desde el menú principal, después de escoger la opción 1.
 
+```
+--------------MENU-----------------------------
 
-8. Reporte de préstamos: Los clientes pueden solicitar un reporte de sus préstamos. El sistema debe generar un archivo de texto que detalle las cuotas pagadas, desglosando el aporte al capital y los intereses abonados hasta el momento. Este reporte puede presentarse en forma tabular. **andres**
+1- Atención Clientes
+    1. Préstamos
+        I. Sacar prestamo
+            - Prestamo en Dólares
+            - Prestamo en Colones
+        II. Pagar Prestamo
+            - Pagar prestamo en Dólares
+            - Pagar prestamo en Colones
+        III. Generar informe (.txt)
 
-9. Almacenamiento de la información: Se debe hacer uso de bases de datos SQL, por lo que es recomendado primero que todo de nir el esquema a utilizar. **kevin**
+2- Información general sobre prestamos bancarios
+        1 - Préstamo Personal 
+        2- Préstamo Prendario 
+        3- Préstamo Hipotecario
+
+3- Volver
+    --------------MENU----------------------------------
+```
+
+Con este menú, al seleccionar "Pagar prestamo", ya sea en dolares o en colones, se le pida al usuario que ingrese el dinero con el que va a pagar. Una vez escogido el monto, se le restará este a la cuenta principal para hacer el pago del préstamo. Luego, al seleccionar generar informe, se crea un ".txt" donde van a estar las cuotas pagadas, desglosando el aporte al capital y los intereses abonados hasta el momento.
+
+## 9. Almacenamiento de la información: Se debe hacer uso de bases de datos SQL, por lo que es recomendado primero que todo de nir el esquema a utilizar. **kevin**
 
