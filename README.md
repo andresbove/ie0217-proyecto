@@ -200,3 +200,11 @@ Con este menú, al seleccionar "Pagar prestamo", ya sea en dolares o en colones,
         
 - **Diseño**
 Meter un schema?
+
+# Referencias
+[1] : https://www.bncr.fi.cr/3-detalles-que-no-pod%C3%A9s-pasar-por-alto-antes-de-pedir-un-pr%C3%A9stamo-personal#:~:text=Un%20pr%C3%A9stamo%20personal%20es%20una,porcentaje%20adicional%20correspondiente%20a%20intereses.
+
+[2] : https://www.supervielle.com.ar/blog/educacion-financiera/que-es-un-prestamo-prendario
+
+[3] : https://www.inavirtual.ed.cr/pluginfile.php/1932699/mod_resource/content/2/SERVER%20GUIA%20MEIC%20BLOQUE4%20ACT%20/s3.html
+
