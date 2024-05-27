@@ -1,5 +1,10 @@
 # ie0217-proyecto
 Repositorio para proyecto del curso IE0217 - Estructuras Abstractas de Datos y Algoritmos para Ingeniería. 
+Christopher Fernandez Vivas B82951
+
+Andres Bonilla Vega
+
+Kevin 
 
 ## 1. Modalidad de operación: El sistema debe iniciar consultando si se va a utilizar en modalidad de atención a clientes o para obtener información general sobre préstamos bancarios. **chris**
 
@@ -21,7 +26,7 @@ Repositorio para proyecto del curso IE0217 - Estructuras Abstractas de Datos y A
 
     Estas mismas se pueden tratar como funciones que al mismo tiempo dentro llaman a otras funciones que contienen todos los metodos necesarios para realizar operaciones referentes a prestamos o operaciones referentes a cuentas corrientes y en dolares.
 
-    Todo lo anterior y los submenus se haran con switch y con bucles do ademas con la implementacion de excepciones.
+    Todo lo anterior y los submenus se haran con switch y con bucles do while , ademas con la implementacion de excepciones.
 
 
 ## 2. Información general: Se deben desplegar las opciones predefinidas para préstamos personales, prendarios e hipotecarios, así como la opción de generar una tabla de pagos esperados para la opción elegida, donde el monto del préstamo es ingresado por el usuario. Además se debe dar la opción de obtener la tabla mediante valores personalizados de monto, cantidad de cuotas y la tasa de interés. **andres**
