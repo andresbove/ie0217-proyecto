@@ -235,6 +235,8 @@ Se tiene el siguiente esquema de alto nivel que podría llegar a cambiar en base
 
 ![Diagrama de la estructura del software del banco generalizada](https://github.com/andresbove/ie0217-proyecto/blob/main/diagrama_2.png)
 
+### Cronograma a seguir (puede variar)
+![cronograma](https://github.com/andresbove/ie0217-proyecto/assets/116931494/b0c5f92c-984a-49f9-bb94-986d512836a9)
 
 # Referencias
 [1] : https://www.bncr.fi.cr/3-detalles-que-no-pod%C3%A9s-pasar-por-alto-antes-de-pedir-un-pr%C3%A9stamo-personal#:~:text=Un%20pr%C3%A9stamo%20personal%20es%20una,porcentaje%20adicional%20correspondiente%20a%20intereses.
