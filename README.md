@@ -76,7 +76,7 @@ Entonces, si se selecciona esta opción, se puede llevar a otro "submenu", donde
 Acá, cada una de esas opciones generará una tabla de pagos esperados para el préstamo escogido, por lo que el pago correspondiente dependerá de la opción que el usuario eligió.
 
 
-## 3. Cuentas bancarias: Un cliente puede poseer hasta dos cuentas bancarias, una en colones y otra en dólares, destinadas a gestionar sus ahorros con la entidad bancaria. Así como certi cados de depósito a plazo (CDP). **kevin**
+## 3. Cuentas bancarias: Un cliente puede poseer hasta dos cuentas bancarias, una en colones y otra en dólares, destinadas a gestionar sus ahorros con la entidad bancaria. Así como certificados de depósito a plazo (CDP). **kevin**
 
 - **Investigación**
 Los certificados a corto plazo (CDP) es una herramienta de ahorros de bajo riesgo que puede generar un interés. Son remitidas por bancos e instituciones financieras. La forma en que funciona es que un inversionista deposita su dinero por un periodo determinado (puede ir desde unos cuantos meses hasta varios años), esto a cambio de una tasa fija de interés. La razón por la que son de bajo riesgo es porque la institución respalda este proceso.
@@ -103,11 +103,11 @@ Es como un tipo de "bitácora" de todas las operaciones que se han hecho a la cu
 Operación   |   Monto    |    Fecha
 _____________________________________________
  
-Retiro      |    3000    |    1 - 1 - 2024
-Depósito    |    1000    |    2 - 1 - 2024
-Retiro      |    5000    |    3 - 1 - 2024
-Depósito    |    9000    |    4 - 1 - 2024
-Depósito    |    1000    |    5 - 1 - 2024
+Retiro      |    -3000    |    1 - 1 - 2024
+Depósito    |    +1000    |    2 - 1 - 2024
+Retiro      |    -5000    |    3 - 1 - 2024
+Depósito    |    +9000    |    4 - 1 - 2024
+Depósito    |    +1000    |    5 - 1 - 2024
 
 ```
 
@@ -165,7 +165,6 @@ Se puede trabajar creando una opción desde el menú principal, después de esco
 --------------MENU-----------------------------
 
 1- Atención Clientes
-    1. Préstamos
         I. Sacar prestamo
             - Prestamo en Dólares
             - Prestamo en Colones
@@ -185,7 +184,7 @@ Se puede trabajar creando una opción desde el menú principal, después de esco
 
 Con este menú, al seleccionar "Pagar prestamo", ya sea en dolares o en colones, se le pida al usuario que ingrese el dinero con el que va a pagar. Una vez escogido el monto, se le restará este a la cuenta principal para hacer el pago del préstamo. Luego, al seleccionar generar informe, se crea un ".txt" donde van a estar las cuotas pagadas, desglosando el aporte al capital y los intereses abonados hasta el momento.
 
-## 9. Almacenamiento de la información: Se debe hacer uso de bases de datos SQL, por lo que es recomendado primero que todo de nir el esquema a utilizar. **kevin**
+## 9. Almacenamiento de la información: Se debe hacer uso de bases de datos SQL, por lo que es recomendado primero que todo de unir el esquema a utilizar. **kevin**
 
 - **Investigación**
     - ¿Qué es una base de datos?
@@ -198,8 +197,9 @@ Con este menú, al seleccionar "Pagar prestamo", ya sea en dolares o en colones,
         - CRUD (crear, leer, actualizar y eliminar).
         - Extraer datos específicos de la base de datos basado en ciertos criterios.
         
-- **Diseño**
-Meter un schema?
+- **Diseño de la estructura del software del banco**
+
+
 
 # Referencias
 [1] : https://www.bncr.fi.cr/3-detalles-que-no-pod%C3%A9s-pasar-por-alto-antes-de-pedir-un-pr%C3%A9stamo-personal#:~:text=Un%20pr%C3%A9stamo%20personal%20es%20una,porcentaje%20adicional%20correspondiente%20a%20intereses.
