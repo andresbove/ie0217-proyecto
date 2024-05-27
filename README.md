@@ -1,10 +1,35 @@
 # ie0217-proyecto
 Repositorio para proyecto del curso IE0217 - Estructuras Abstractas de Datos y Algoritmos para Ingeniería. 
+
 Christopher Fernandez Vivas B82951
 
 Andres Bonilla Vega
 
 Kevin 
+
+# Investigación
+# Préstamo personal
+
+En los préstamos personales, una entidad financiera otorga una cantidad de dinero que debe ser devuelta en un plazo específico junto con un porcentaje adicional que corresponde a los intereses generados. Este dinero puede emplearse para cubrir necesidades personales como gastos médicos, educativos, la compra de bienes, entre otros fines. [1]  
+
+El uso que se le va a dar al capital brindado es muy importante en el momento de realizar una solicitud de préstamo. Algunos de los usos pueden ser los siguientes:
+
+**Emergencias médicas.** Cobertura de imprevistos, como tratamientos cirugias o intervenciones de emergencia, operaciones dentales urgentes o gastos veterinarios inesperados para una mascota.
+
+Inversiones como la adquisición de activos con el propósito de incrementar el patrimonio personal, por ejemplo, electrodomésticos para el hogar.
+
+Prestamo de capital para satisfacer necesidades diarias, como reemplazar una computadora dañada o adquirir un celular nuevo.
+
+# Préstamo prendario
+
+Este es un tipo de financiamiento donde la persona proporciona un bien como garantía, o colateral, para obtener el préstamo, utilizando esta garantía como un "respaldo" para la entidad que da el préstamo. Normalmente se trata de bienes muebles como vehículos, motocicletas, entre otros. [2]
+
+Es por esto que el bien ofrecido funciona como garantía hasta que el préstamo sea pagado. Estos préstamos se utilizan principalmente para la compra de vehículos nuevos o usados, quedando el bien adquirido como prenda a favor de la entidad financiera que otorga el financiamiento. [2]
+
+# Préstamo Hipotecario
+
+El préstamo hipotecario es un tipo de crédito que utiliza un inmueble como garantía. Estos préstamos se solicitan para la adquisición de terrenos, viviendas y otros tipos de propiedades. [3]
+
 
 ## 1. Modalidad de operación: El sistema debe iniciar consultando si se va a utilizar en modalidad de atención a clientes o para obtener información general sobre préstamos bancarios. **chris**
 
