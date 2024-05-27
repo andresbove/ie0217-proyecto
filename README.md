@@ -212,6 +212,7 @@ Con este menú, al seleccionar "Pagar prestamo", ya sea en dolares o en colones,
     - Extraer datos específicos de la base de datos basado en ciertos criterios.
 
 Se tiene el siguiente esquema de alto nivel que podría llegar a cambiar en base a las necesidades durante el desarrollo del proyecto:
+<img width="470" alt="diagrama" src="https://github.com/andresbove/ie0217-proyecto/assets/116931494/22d7a65f-ed73-4c31-a008-a91155ca58f1">
 
 
 
