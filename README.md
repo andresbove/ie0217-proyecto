@@ -30,7 +30,27 @@ Es por esto que el bien ofrecido funciona como garantía hasta que el préstamo 
 
 El préstamo hipotecario es un tipo de crédito que utiliza un inmueble como garantía. Estos préstamos se solicitan para la adquisición de terrenos, viviendas y otros tipos de propiedades. [3]
 
+# Interes Simple
 
+El interés simple es una forma de calcular los intereses de un préstamo que solo tiene en cuenta el capital principal. Permanece constante en el tiempo y no se añade a periodos sucesivos como en el interés compuesto. [7]
+
+# Interes Compuesto
+
+    El interés compuesto es una forma de calcular los intereses de una inversión, que utiliza los intereses acumulados en el pasado además del capital principal invertido. Los intereses pasados a su vez van generando nuevos intereses. Lo que provoca un efecto bola de nieve, haciendo que el capital y los nuevos intereses sean cada vez más grandes. [8]
+
+# Interes fijo
+    Este tipo de interés se mantiene constante durante toda la duración o vida del préstamo. Es independiente de la tasa de interés actual del mercado, es decir que si esta llegara a subir, no nos veríamos perjudicados, pero si bajara, tampoco nos beneficiaríamos. [6]
+
+# Interes Variable
+
+  Se actualiza y se revisa su cantidad en los plazos establecidos por la entidad financiera. Está sometido a los cambios en las tasas de interés. Con el interés variable nos beneficiamos de la baja en la tasa de interés, pero también nos vemos afectados si sube. Por lo general, se establece un rango dentro del cual oscila la tasa de interés. Su plazo de amortización puede ser más extenso que el de interés fijo.  [6]
+
+# Interes Mixto
+
+    En este tipo de interés, durante los primeros años de vida del préstamo la tasa de interés es fija y el resto de tiempo, hasta su terminación, es variable. por ejemplo los que fueron o van a comprar un carro que les dice 5 years tasa fija y el prestamo es a 8 years.[6]
+# CDP
+
+    Los certificados a corto plazo (CDP) es una herramienta de ahorros de bajo riesgo que puede generar un interés. Son remitidas por bancos e instituciones financieras. La forma en que funciona es que un inversionista deposita su dinero por un periodo determinado (puede ir desde unos cuantos meses hasta varios años), esto a cambio de una tasa fija de interés. La razón por la que son de bajo riesgo es porque la institución respalda este proceso [4]. 
 ## 1. Modalidad de operación: El sistema debe iniciar consultando si se va a utilizar en modalidad de atención a clientes o para obtener información general sobre préstamos bancarios. **chris**
 
     Este Paso es uno de los mas importante en los que va a tener el menu de nuestra aplicacion ,va a tener un menu con 2 opciones primeramente:
@@ -128,7 +148,7 @@ Depósito    |    +1000    |    5 - 1 - 2024
 
 ```
 
-## 6. Identicación de clientes: Cada cliente será identi cado mediante un número de identi cación único, el cual estará limitado a un número decimal entre 0 y 999999999. **kevin**
+## 6. Identicación de clientes: Cada cliente será identificado mediante un número de identi cación único, el cual estará limitado a un número decimal entre 0 y 999999999. **kevin**
 
 Para el diseño se considera que el número de identificación no es algo que sea manejado por el usuario, sino por el mismo sistema. Puesto que el número es muy grande, es muy probable que se utilice el tipo de dato `BIGINT` en SQL, además es importante que cada número de cliente debe ser único, para esto se puede usar restricciones como `UNIQUE`. Puesto que el número de cliente va a ser manejado internamente, no hay necesidad de verificar de que el número de cliente sean solamente números y que sean del 0-9.
 
@@ -151,7 +171,7 @@ $C_{0}$ = monto inicial
 $t$ = numero de periodos
 
 
-Ecuación del interés compuesto:
+Ecuación del **interés compuesto**:
 
 $C_{n} = C_{0} * (1*n)^t$
 
@@ -227,3 +247,9 @@ Se tiene el siguiente esquema de alto nivel que podría llegar a cambiar en base
 [4] : https://bettermoneyhabits.bankofamerica.com/es/personal-banking/what-is-a-cd-investment
 
 [5] : https://www.springboard.com/blog/data-analytics/what-is-sql/
+
+[6] : https://edu.gcfglobal.org/es/credito/cuales-son-los-tipos-de-interes/1/
+
+[7] : https://economipedia.com/definiciones/interes-simple.html
+
+[8] : https://economipedia.com/definiciones/interes-compuesto.html
