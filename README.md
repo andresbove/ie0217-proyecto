@@ -75,6 +75,26 @@ Entonces, si se selecciona esta opción, se puede llevar a otro "submenu", donde
 
 Acá, cada una de esas opciones generará una tabla de pagos esperados para el préstamo escogido, por lo que el pago correspondiente dependerá de la opción que el usuario eligió.
 
+Para el sistema se generará una base de datos con diferentes atributos, donde el atributo "Cédula (Key)" será la clave principal a la que las tablas restantes le harán referencia como foreign keys.  
+Encabezado de la Tabla **Usuarios**:
+```
+| Usuarios | Cédula (Key) | Nombre | Apellidos| Provincia |Télefono | Correo |
+```
+
+Encabezado de la Tabla **Colones**:
+```
+| Cédula(foreign key) | Saldos |
+```
+Encabezado de la Tabla **Dólares**:
+```
+| Cédula(foreign key) | Saldos |
+```
+
+Encabezado de la Tabla **Préstamos**:
+```
+| Cédula(foreign key) | Periodos | Cuota | Saldo pendiente | Meses | Tasa de interés |
+```
+
 
 ## 3. Cuentas bancarias: Un cliente puede poseer hasta dos cuentas bancarias, una en colones y otra en dólares, destinadas a gestionar sus ahorros con la entidad bancaria. Así como certificados de depósito a plazo (CDP). **kevin**
 
