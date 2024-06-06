@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\cfernan3\\OneDrive - Intel Corporation\\Documents\\proyecto_estructuras_abstractas\\ie0217-proyecto\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\cfernan3\\OneDrive - Intel Corporation\\Documents\\proyecto_estructuras_abstractas\\ie0217-proyecto\\src\\functions.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\functions.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "functions.hpp",
+              "DocumentMoniker": "C:\\Users\\cfernan3\\OneDrive - Intel Corporation\\Documents\\proyecto_estructuras_abstractas\\ie0217-proyecto\\src\\functions.hpp",
+              "RelativeDocumentMoniker": "src\\functions.hpp",
+              "ToolTip": "C:\\Users\\cfernan3\\OneDrive - Intel Corporation\\Documents\\proyecto_estructuras_abstractas\\ie0217-proyecto\\src\\functions.hpp",
+              "RelativeToolTip": "src\\functions.hpp",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAABoAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-06-04T15:42:20.319Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
