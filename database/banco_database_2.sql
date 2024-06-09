@@ -1,14 +1,12 @@
--- Creado a partir de functions.hpp
-
 -- Creando base de datos
-CREATE DATABASE IF NOT EXISTS banco_data_base;
+CREATE DATABASE IF NOT EXISTS banco_data_base_2;
 
-USE banco_data_base;
+USE banco_data_base_2;
 
 -- Tabla de cliente
 CREATE TABLE IF NOT EXISTS Cliente (
-    id INT AUTO_INCREMENT primary key,
-    cedula varchar(50),
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cedula INT UNIQUE NOT NULL,
     nombre VARCHAR(50),
     apellido1 VARCHAR(50),
     apellido2 VARCHAR(50),
@@ -19,25 +17,26 @@ CREATE TABLE IF NOT EXISTS Cliente (
 
 -- Tabla de colones
 CREATE TABLE IF NOT EXISTS cuentaColones (
-    id INT AUTO_INCREMENT,
-    cedula INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cedula INT,
     saldo FLOAT,
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
 
 -- Tabla de dolares
 CREATE TABLE IF NOT EXISTS cuentaDolares (
-    id INT AUTO_INCREMENT,
-    cedula INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cedula INT,
     saldo FLOAT,
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
 
 -- Tabla de prestamos
 CREATE TABLE IF NOT EXISTS prestamo (
-    id INT AUTO_INCREMENT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     cedula INT,
     periodos INT,
+    valor_cuota INT,
     cuotas INT,
     moneda VARCHAR(10),
     saldo FLOAT,
@@ -45,7 +44,7 @@ CREATE TABLE IF NOT EXISTS prestamo (
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
 
--- Tabla de registro de transferencia de cuentas
+-- Tabla de registro de transferencia de cuentas en colones
 CREATE TABLE IF NOT EXISTS registroColones (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cedula INT,
@@ -55,7 +54,7 @@ CREATE TABLE IF NOT EXISTS registroColones (
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
 
--- Tabla de registro de transferencia de dolares
+-- Tabla de registro de transferencia de cuentas en dolares
 CREATE TABLE IF NOT EXISTS registroDolares (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cedula INT,
@@ -64,7 +63,6 @@ CREATE TABLE IF NOT EXISTS registroDolares (
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
-
 
 -- Mostrar todas las tablas
 SELECT * FROM Cliente;

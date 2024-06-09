@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <limits>
+#include "functions.hpp"
+
 
 using namespace std;
 
@@ -8,10 +10,12 @@ void menuAtencionCliente();
 void menuInformacionPrestamos();
 void menuSacarPrestamo();
 void menuPagarPrestamo();
-
+Cliente usuario;
 int main() {
     int opcion;
 
+    connectDB();
+    //Cliente usuario;
     do {
         cout << "\n----- Menu -----" << endl;
         cout << "1- Atencion a cliente" << endl;
@@ -40,7 +44,8 @@ int main() {
             default:
                 cout << "Opcion no valida, intente de nuevo." << endl;
             }
-        } catch (const exception& e) {
+        }
+        catch (const exception& e) {
             cerr << e.what() << endl;
             cin.clear(); // Limpiar error
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descartar opcion ingresada
@@ -79,6 +84,7 @@ void menuAtencionCliente() {
                 break;
             case 3:
                 cout << "Ha seleccionado generar informe." << endl;
+                
                 break;
             case 4:
                 cout << "Volviendo al menu principal..." << endl;
@@ -86,7 +92,8 @@ void menuAtencionCliente() {
             default:
                 cout << "Opcion no valida, intente de nuevo." << endl;
             }
-        } catch (const exception& e) {
+        }
+        catch (const exception& e) {
             cerr << e.what() << endl;
             cin.clear(); // Limpiar error
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descartar opcion ingresada
@@ -121,12 +128,13 @@ void menuSacarPrestamo() {
                 cout << "Ha seleccionado sacar prestamo en Colones." << endl;
                 break;
             case 3:
-                cout << "Volviendo al menu de AtenciÃ³n a Cliente..." << endl;
+                cout << "Volviendo al menu de Atención a Cliente..." << endl;
                 break;
             default:
                 cout << "Opcion no valida, intente de nuevo." << endl;
             }
-        } catch (const exception& e) {
+        }
+        catch (const exception& e) {
             cerr << e.what() << endl;
             cin.clear(); // Limpiar error
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descartar opcion ingresada
@@ -143,7 +151,7 @@ void menuPagarPrestamo() {
         cout << "        1. Prestamo en Dolares" << endl;
         cout << "        2. Prestamo en Colones" << endl;
         cout << "        3. Volver" << endl;
-        cout << "--------------MENU-----------------------------"<<"\n" << endl;
+        cout << "--------------MENU-----------------------------" << "\n" << endl;
         cout << "Ingrese su opcion: ";
 
         try {
@@ -161,12 +169,13 @@ void menuPagarPrestamo() {
                 cout << "Ha seleccionado pagar prestamo en Colones." << endl;
                 break;
             case 3:
-                cout << "Volviendo al menu de AtenciÃ³n a Cliente..." << endl;
+                cout << "Volviendo al menu de Atención a Cliente..." << endl;
                 break;
             default:
                 cout << "Opcion no valida, intente de nuevo." << endl;
             }
-        } catch (const exception& e) {
+        }
+        catch (const exception& e) {
             cerr << e.what() << endl;
             cin.clear(); // Limpiar error
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descartar opcion ingresada
@@ -210,7 +219,8 @@ void menuInformacionPrestamos() {
             default:
                 cout << "Opcion no valida, intente de nuevo." << endl;
             }
-        } catch (const exception& e) {
+        }
+        catch (const exception& e) {
             cerr << e.what() << endl;
             cin.clear(); // Limpiar error
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descartar opcion ingresada

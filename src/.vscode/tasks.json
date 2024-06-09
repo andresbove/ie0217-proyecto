@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build my project",
+        "type": "shell",
+        "command": "g++",
+        "args": [
+          "-I",
+          "C:/MySQL/MySQL Connector C++ 8.4/include",
+          "-L",
+          "C:/MySQL/MySQL Connector C++ 8.4/lib64",
+          "-lmysqlcppconn"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      }
+    ]
+  }
