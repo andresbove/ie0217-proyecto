@@ -1,7 +1,7 @@
 -- Creando base de datos
-CREATE DATABASE IF NOT EXISTS banco_data_base_2;
+CREATE DATABASE IF NOT EXISTS banco_data_base_4;
 
-USE banco_data_base_2;
+USE banco_data_base_4;
 
 -- Tabla de cliente
 CREATE TABLE IF NOT EXISTS Cliente (
@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS prestamo_Colones (
     cuotasRestantes INT,
     interesAnual FLOAT,
     moneda VARCHAR(10),
+    tipo VARCHAR(20),
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
 
@@ -55,6 +56,7 @@ CREATE TABLE IF NOT EXISTS prestamo_Dolares (
     cuotasRestantes INT,
     interesAnual FLOAT,
     moneda VARCHAR(10),
+    tipo VARCHAR(20),
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
 
