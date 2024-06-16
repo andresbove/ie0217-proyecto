@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS registroDolares (
 SELECT * FROM Cliente;
 SELECT * FROM cuentaColones;
 SELECT * FROM cuentaDolares;
-SELECT * FROM prestamo;
+SELECT * FROM prestamo_Dolares;
+SELECT * FROM prestamo_Colones;
 SELECT * FROM registroColones;
 SELECT * FROM registroDolares;
