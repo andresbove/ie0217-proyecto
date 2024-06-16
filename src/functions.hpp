@@ -5,6 +5,9 @@
 #include <iostream>
 #include <format>
 #include <cmath>
+#include <chrono>
+#include <sstream>
+#include <iomanip>
 
 //Libreria de sql
 #include "mysql_driver.h"
@@ -644,6 +647,30 @@ void pagarPrestamoDolares(int cedula,string tipo) {
 
 void generarInforme(string identificacion, string moneda) {
     cout << "generar informe  de un prestamo teniendo en cuenta identificacion y  moneda" << endl;
+}
+
+tm calcularFechaActual() {
+    auto now = chrono::system_clock::now();
+    time_t now_time = chrono::system_clock::to_time_t(now);
+    tm now_tm;
+    localtime_s(&now_tm, &now_time);
+    now_tm.tm_hour = 0;
+    now_tm.tm_min = 0;
+    now_tm.tm_sec = 0;
+    return now_tm;
+}
+
+tm calcularFechaFinal(tm fechaInicio, int months) {
+    tm fechaFinal = fechaInicio;
+    fechaFinal.tm_mon += months;
+    mktime(&fechaFinal);
+    return fechaFinal;
+}
+
+string formatearFecha(tm fecha) {
+    ostringstream oss;
+    oss << put_time(&fecha, "%Y-%m-%d");
+    return oss.str();
 }
 
 #endif
