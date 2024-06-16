@@ -673,4 +673,88 @@ string formatearFecha(tm fecha) {
     return oss.str();
 }
 
+// Funcion para manejar el CDP
+void certificadoDP(int cedula) {
+    int meses;
+    double monto, tasaInteres;
+    string moneda, opcion, fechaInicioStr, fechaVencimientoStr;
+
+    cout << "********************************" << endl;
+    cout << "************ CDP ***************" << endl;
+    cout << "********************************" << endl;
+
+    cout << "\n Por favor ingresa la cantidad de meses que desea para el CDP: ";
+    cin >> meses;
+    cout << "\n Por favor ingresa la moneda: ";
+    cin >> moneda;
+    cout << "\n Por favor ingrese el monto inicial: ";
+    cin >> monto;
+
+    if (0 < meses && meses <= 2) {
+        tasaInteres = 1.5;
+    }
+    else if (3 <= meses && meses < 6) {
+        tasaInteres = 2.25;
+    }
+    else if (6 <= meses) {
+        tasaInteres = 3.75;
+    }
+    else {
+        cout << "Meses ingresado no valido." << endl; // Manejar este error
+    }
+
+    // Calculos de ganancia
+    double tasaMensual = tasaInteres / 12;
+    double gananciaInteres = monto * tasaMensual * meses;
+    double ganancia = gananciaInteres + monto;
+
+    cout << "Para " << meses << ", con un monto de " << monto << ", a una tasa de " << tasaInteres << ", va a tener una ganancia de " << ganancia << "." << endl;
+
+    // Implementar esto por si el usuario quiere cancelar
+    // cout << "\n Desea continuar (y/n)? (Este proceso es irreversible)" << endl;
+    // cin >> opcion;
+
+    std::tm fecha_inicio = calcularFechaActual();
+    std::tm fecha_vencimiento = calcularFechaFinal(fecha_inicio, meses);
+
+    // Pasar fechas de formato date a string
+    fechaInicioStr = formatearFecha(fecha_inicio);
+    fechaVencimientoStr = formatearFecha(fecha_vencimiento);
+
+    std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO CertificadoDeposito(cedula, monto, moneda, tasaInteres, meses, fecha_inicio, fecha_vencimiento) VALUES (?, ?, ?, ?, ?, ?, ?)"));
+
+    pstmt->setInt(1, cedula);
+    pstmt->setDouble(2, monto);
+    pstmt->setString(3, moneda);
+    pstmt->setDouble(4, tasaInteres);
+    pstmt->setInt(5, meses);
+    pstmt->setString(6, fechaInicioStr);
+    pstmt->setString(7, fechaVencimientoStr);
+
+    // Actualizar valores de la cuenta del cliente
+    if (moneda == "CRC" || moneda == "crc") {
+
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo - ? WHERE cedula = ?"));
+
+        // Establece los valores de los par�metros
+        pstmt->setDouble(1, monto); // Restar cantidad del CDP (colones)
+        pstmt->setInt(2, cedula); // C�dula del cliente
+        pstmt->executeUpdate();
+
+        cout << "Su proceso de CDP (en colones) se ha realizado de forma correcta." << endl;
+    }
+    else
+    {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo - ? WHERE cedula = ?"));
+
+        // Establece los valores de los par�metros
+        pstmt->setDouble(1, monto); // Restar cantidad del CDP (dolares)
+        pstmt->setInt(2, cedula); // C�dula del cliente
+        pstmt->executeUpdate();
+
+        cout << "Su proceso de CDP (en dolares) se ha realizado de forma correcta." << endl;
+    }
+
+    pstmt->executeUpdate();
+}
 #endif
