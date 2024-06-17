@@ -80,6 +80,19 @@ CREATE TABLE IF NOT EXISTS registroDolares (
     FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
 );
 
+-- Tabla de certificados a corto plazo
+CREATE TABLE IF NOT EXISTS CertificadoDeposito (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cedula INT,
+    monto DECIMAL(10, 2) NOT NULL,
+    moneda VARCHAR(10),
+    tasaInteres DECIMAL(5, 2) NOT NULL,
+    meses INT NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_vencimiento DATE NOT NULL,
+    FOREIGN KEY (cedula) REFERENCES Cliente(cedula)
+);
+
 -- Mostrar todas las tablas
 SELECT * FROM Cliente;
 SELECT * FROM cuentaColones;
@@ -88,3 +101,4 @@ SELECT * FROM prestamo_Dolares;
 SELECT * FROM prestamo_Colones;
 SELECT * FROM registroColones;
 SELECT * FROM registroDolares;
+SELECT * FROM CertificadoDeposito;

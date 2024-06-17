@@ -21,27 +21,31 @@ int main() {
     //Cliente usuario;
     do {
         cout << "\n----- Menu -----" << endl;
-        cout << "1- Atencion a cliente" << endl;
-        cout << "2- Informacion general sobre prestamos bancarios" << endl;
-        cout << "3- Salir" << endl;
+        cout << "1- Crear Usuario" << endl;
+        cout << "2- Atencion a cliente" << endl;
+        cout << "3- Informacion general sobre prestamos bancarios" << endl;
+        cout << "4- Salir" << endl;
         cout << "----------------" << endl;
-        cout << "Ingrese su opcion (1, 2 o 3): ";
+        cout << "Ingrese su opcion (1, 2, 3 o 4): ";
 
         try {
             cin >> opcion;
 
             if (cin.fail()) {
-                throw runtime_error("Opcion no valida, debe ingresar 1, 2 o 3.\n");
+                throw runtime_error("Opcion no valida, debe ingresar 1, 2, 3 o 4.\n");
             }
 
             switch (opcion) {
             case 1:
-                menuAtencionCliente();
+                crear_usuario();
                 break;
             case 2:
-                menuInformacionPrestamos();
+                menuAtencionCliente();
                 break;
             case 3:
+                menuInformacionPrestamos();
+                break;
+            case 4:
                 cout << "Saliendo del programa..." << endl;
                 break;
             default:
@@ -70,7 +74,8 @@ void menuAtencionCliente() {
         cout << "        4. Depositar" << endl;
         cout << "        5. Transferir" << endl;
         cout << "        6. Retirar" << endl;
-        cout << "        7. Volver" << endl;
+        cout << "        7. CDP" << endl;
+        cout << "        8. Volver" << endl;
         cout << "--------------MENU-----------------------------" << endl;
         cout << "Ingrese su opcion: ";
 
@@ -78,7 +83,7 @@ void menuAtencionCliente() {
             cin >> opcion;
 
             if (cin.fail()) {
-                throw runtime_error("Opcion no valida, debe ingresar un numero del 1 al 7.\n");
+                throw runtime_error("Opcion no valida, debe ingresar un numero del 1 al 8.\n");
             }
 
             switch (opcion) {
@@ -102,6 +107,9 @@ void menuAtencionCliente() {
                 menuRetirar();
                 break;
             case 7:
+                certificadoDP();
+                break;
+            case 8:
                 cout << "Volviendo al menu principal..." << endl;
                 break;
             default:
@@ -138,13 +146,13 @@ void menuSacarPrestamo() {
 
             switch (opcion) {
             case 1:
-                subMenuSacarPrestamo("Prendario");
+                subMenuSacarPrestamo("PRENDARIO");
                 break;
             case 2:
-                subMenuSacarPrestamo("Hipotecario");
+                subMenuSacarPrestamo("HIPOTECARIO");
                 break;
             case 3:
-                subMenuSacarPrestamo("Personal");
+                subMenuSacarPrestamo("PERSONAL");
                 break;
             case 4:
                 cout << "Volviendo al menu de Atencion a Cliente..." << endl;
@@ -184,7 +192,7 @@ void subMenuSacarPrestamo(const string& tipoPrestamo) {
             case 1:
                 cout << "Ha seleccionado sacar prestamo " << tipoPrestamo << " en Dolares." << endl;
                 // Lógica para sacar préstamo específico en dólares
-                sacarPrestamo("Dolares", tipoPrestamo);
+                sacarPrestamo("USD", tipoPrestamo);
                 break;
             case 2:
                 cout << "Ha seleccionado sacar prestamo " << tipoPrestamo << " en Colones." << endl;
@@ -209,6 +217,7 @@ void subMenuSacarPrestamo(const string& tipoPrestamo) {
 
 void menuPagarPrestamo() {
     int opcion;
+    string tipo;
     do {
         cout << "\n--------------MENU-----------------------------" << endl;
         cout << "Pagar prestamo" << endl;
@@ -228,13 +237,24 @@ void menuPagarPrestamo() {
             switch (opcion) {
             case 1:
                 cout << "Ha seleccionado pagar prestamo en Dolares." << endl;
+                cout << "Que tipo de prestamo quieres pagar: ";
+                cin >> tipo;
+                
+                toUpperCase(tipo);
+                cout << endl;
+
                 // Lógica para pagar préstamo en dólares
-                pagarPrestamoDolares("Dolares");
+                pagarPrestamoDolares(tipo);
+
                 break;
             case 2:
                 cout << "Ha seleccionado pagar prestamo en Colones." << endl;
+
+                cout << "Que tipo de prestamo quieres pagar: ";
+                cin >> tipo;
+                toUpperCase(tipo);
                 // Lógica para pagar préstamo en colones
-                pagarPrestamoColones("CRC");
+                pagarPrestamoColones(tipo);
                 break;
             case 3:
                 cout << "Volviendo al menu de Atencion a Cliente..." << endl;
@@ -274,7 +294,7 @@ void menuDepositar() {
             case 1:
                 cout << "Ha seleccionado depositar en Dolares." << endl;
                 // Lógica para depositar en dólares
-                depositar("Dolares");
+                depositar("USD");
                 break;
             case 2:
                 cout << "Ha seleccionado depositar en Colones." << endl;
@@ -319,7 +339,7 @@ void menuTransferir() {
             case 1:
                 cout << "Ha seleccionado transferir en Dolares." << endl;
                 // Lógica para transferir en dólares
-                transferir("Dolares");
+                transferir("USD");
                 break;
             case 2:
                 cout << "Ha seleccionado transferir en Colones." << endl;
@@ -364,7 +384,7 @@ void menuRetirar() {
             case 1:
                 cout << "Ha seleccionado retirar en Dolares." << endl;
                 // Lógica para retirar en dólares
-                retirar("Dolares");
+                retirar("USD");
                 break;
             case 2:
                 cout << "Ha seleccionado retirar en Colones." << endl;

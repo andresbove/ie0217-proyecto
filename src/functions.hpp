@@ -8,6 +8,8 @@
 #include <chrono>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
+#include <cctype>
 
 //Libreria de sql
 #include "mysql_driver.h"
@@ -62,6 +64,10 @@ void registroDolares(int cedula, float cantidad, string estado) {
     pstmt->executeUpdate();
 }
 
+
+void toUpperCase(string &palabra) {
+    transform(palabra.begin(), palabra.end(), palabra.begin(), [](unsigned char c) {return toupper(c);});
+}
 void connectDB() {
     try
     {
@@ -101,7 +107,8 @@ void crear_usuario() {
     string Provincia;
     string telefono;
     string correo;
-
+    cout << endl;
+    cout << endl;
 
     cout << "***************************" << endl;
     cout << "*****Creando Usuario*****" << endl;
@@ -120,10 +127,10 @@ void crear_usuario() {
     cin >> Provincia;
     cout << "\n Por favor ingresa el telefono: ";
     cin >> telefono;
-    cout << "\n Por favor ingresa el correo: " << endl;
+    cout << "\n Por favor ingresa el correo: ";
     cin >> correo;
 
-
+    
 
 
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO Cliente (cedula, nombre, apellido1, apellido2, provincia, telefono, correo) VALUES (?,?, ?, ?, ?, ?, ?)"));
@@ -137,6 +144,7 @@ void crear_usuario() {
     pstmt->setString(7, correo);
 
     pstmt->executeUpdate();
+    cout << endl;
     cout << "\n Se agrego el usuario de forma exitosa .... " << endl;
 };
 
@@ -145,6 +153,8 @@ void crearCuentaColones() {
     //cuentaColones cuenta;
     int cedula;
     float saldo;
+    cout << endl;
+    cout << endl;
     cout << "*********************************" << endl;
     cout << "*****Creando Cuenta Colones******" << endl;
     cout << "*********************************" << endl;
@@ -154,7 +164,7 @@ void crearCuentaColones() {
     cout << "\n Por favor ingresa el saldo inicial a depositar en colones: ";
     cin >> saldo;
 
-
+  
     //lamada a bases de datos INSERT
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaColones (cedula, saldo) VALUES (?, ?)"));
     pstmt->setInt(1, cedula); // Cédula del cliente
@@ -170,6 +180,8 @@ void crearCuentaColones() {
 
 void crearCuentaDolares() {
     //cuentaDolares cuenta;
+    cout << endl;
+    cout << endl;
     cout << "*********************************" << endl;
     cout << "*****Creando Cuenta Dolares******" << endl;
     cout << "*********************************" << endl;
@@ -199,6 +211,8 @@ void depositar(string moneda) {
     int cedula;
     float deposito;
     //string moneda;
+    cout << endl;
+    cout << endl;
 
     cout << "*********************************" << endl;
     cout << "*********Depositando*************" << endl;
@@ -222,7 +236,7 @@ void depositar(string moneda) {
         pstmt->setDouble(1, deposito); // Nuevo saldo
         pstmt->setInt(2, cedula); // Cédula del cliente
         pstmt->executeUpdate();
-
+        cout << endl;
         cout << "Se agrego el deposito  de  forma exitosa .... " << endl;
     }
     else
@@ -234,7 +248,7 @@ void depositar(string moneda) {
         pstmt->setDouble(1, deposito); // Nuevo saldo
         pstmt->setInt(2, cedula); // Cédula del cliente
         pstmt->executeUpdate();
-
+        cout << endl;
         cout << "Se agrego el deposito  de  forma exitosa .... " << endl;
     }
 
@@ -257,7 +271,9 @@ void retirar(string moneda) {
 
     int cedula;
     float retiro;
-    // string moneda;
+    //string moneda;
+    cout << endl;
+    cout << endl;
     cout << "*********************************" << endl;
     cout << "*********Retirando*************" << endl;
     cout << "*********************************" << endl;
@@ -266,8 +282,8 @@ void retirar(string moneda) {
     cin >> cedula;
     cout << "\n Por favor ingresa la cantidad a retirar: ";
     cin >> retiro;
-    cout << "\n Por favor ingresa la moneda: ";
-    cin >> moneda;
+    //cout << "\n Por favor ingresa la moneda: ";
+    //cin >> moneda;
 
     //llamada a la base de datos
     //sera un update
@@ -279,6 +295,7 @@ void retirar(string moneda) {
         pstmt->setDouble(1, retiro); // Nuevo saldo
         pstmt->setInt(2, cedula); // Cédula del cliente
         pstmt->executeUpdate();
+        cout << endl;
         cout << "Se retiro el dinero  de forma exitosa.... " << endl;
 
     }
@@ -290,6 +307,7 @@ void retirar(string moneda) {
         pstmt->setDouble(1, retiro); // Nuevo saldo
         pstmt->setInt(2, cedula); // Cédula del cliente
         pstmt->executeUpdate();
+        cout << endl;
         cout << "Se retiro el dinero  de forma exitosa.... " << endl;
     }
 
@@ -309,8 +327,10 @@ void transferir(string moneda) {
     int depositante;
     float cantidad;
     int destinatario;
-    // string moneda;
+    //string moneda;
 
+    cout << endl;
+    cout << endl;
     cout << "*********************************" << endl;
     cout << "*********Transfiriendo*************" << endl;
     cout << "*********************************" << endl;
@@ -325,7 +345,7 @@ void transferir(string moneda) {
     //cin >> moneda;
 
     if (moneda == "CRC") {
-
+    
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo - ? WHERE cedula = ?"));
 
         // Establece los valores de los parámetros
@@ -339,7 +359,10 @@ void transferir(string moneda) {
         pstmt2->setDouble(1, cantidad); // Nuevo saldo
         pstmt2->setInt(2, destinatario); // Cédula del cliente
         pstmt2->executeUpdate();
+        cout << endl;
         cout << "Se Realizo la transferencia de forma exitosa.... " << endl;
+        cout << endl;
+        cout << endl;
     }
     else
     {
@@ -356,7 +379,10 @@ void transferir(string moneda) {
         pstmt2->setDouble(1, cantidad); // Nuevo saldo
         pstmt2->setInt(2, destinatario); // Cédula del cliente
         pstmt2->executeUpdate();
+        cout << endl;
         cout << "Se Realizo la transferencia de forma exitosa.... " << endl;
+        cout << endl;
+        cout << endl;
     }
 
     //registro de transacciones
@@ -377,26 +403,26 @@ void transferir(string moneda) {
 //funciones para los prestamos
 //funciones para los prestamos
 
-float calcularInteresSimple(float cantidadInicial, int years, float interesAnual) {
-
+float calcularInteresSimple(float cantidadInicial,int years,float interesAnual) {
+    
     float interes = cantidadInicial * years * interesAnual;
     return interes;
 }
 
-float calcularInteresCompuesto(float cantidadInicial, int years, float interesAnual, float capitalizacion = 1) {
-    float interes = cantidadInicial * pow(1 + interesAnual / capitalizacion, years * capitalizacion);
+float calcularInteresCompuesto(float cantidadInicial, int years, float interesAnual, float capitalizacion=1) {
+    float interes = cantidadInicial*pow(1+interesAnual/capitalizacion,years*capitalizacion);
     return interes;
 }
 
 //revisar estas formulas
 float cuota(float cantidadInicial, float interesAnual, int periodos) {
     float interesMensual = interesAnual / 12;
-    float resultado = cantidadInicial * ((interesMensual * pow(1 + interesMensual, periodos)) / pow(1 + interesMensual, periodos - 1));
+    float resultado = cantidadInicial*((interesMensual * pow(1 + interesMensual, periodos)) / pow(1 + interesMensual, periodos - 1));
     return resultado;
 }
 
 
-float obtenerCuotaColones(int cedula, string tipo) {
+float obtenerCuotaColones(int cedula,string tipo) {
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Colones WHERE cedula=? AND tipo=?"));
 
 
@@ -412,7 +438,7 @@ float obtenerCuotaColones(int cedula, string tipo) {
     // Verificar si se obtuvo un resultado
     if (res->next()) {
         cuota = res->getDouble("cuota");
-        std::cout << "El valor de la cuota es: " << cuota << std::endl;
+        //std::cout << "El valor de la cuota es: " << cuota << std::endl;
     }
     else {
         std::cout << "No se encontraron registros que coincidan con los criterios especificados." << std::endl;
@@ -422,10 +448,12 @@ float obtenerCuotaColones(int cedula, string tipo) {
     //ahi obtuvimos la cuota en colones
 
 
+
+
 }
 
 float obtenerCuotaDolares(int cedula, string tipo) {
-
+    
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Dolares WHERE cedula=? AND tipo=?"));
 
 
@@ -436,18 +464,24 @@ float obtenerCuotaDolares(int cedula, string tipo) {
     res = pstmt->executeQuery();
     //ahi obtenemos la respuesta
 
-    // Revisar esta variable
-    float cuota = 0.0f;
+    float cuota;
 
+    // Verificar si se obtuvo un resultado
+    if (res->next()) {
+        cuota = res->getDouble("cuota");
+        //std::cout << "El valor de la cuota es: " << cuota << std::endl;
+    }
+    else {
+        std::cout << "No se encontraron registros que coincidan con los criterios especificados." << std::endl;
+    }
     return cuota;
 
-    //ahi obtuvimos la cuota en colones
-
 }
-
 //crear un prestamo
 //segun lo de arriba creemos que ya es suficiente para saber que prestamos iremos a sacar
 void sacarPrestamo(string moneda, string tipo) {
+    cout << endl;
+    cout << endl;
     cout << "*********************************" << endl;
     cout << "*********Sacar Prestamo*************" << endl;
     cout << "*********************************" << endl;
@@ -479,7 +513,7 @@ void sacarPrestamo(string moneda, string tipo) {
 
     //sacaremos la cuota
 
-    Cuota = cuota(cantidad, tasaInteresAnual, periodos);//ya calculamos la cuota que tienen que pagar con interes fijo
+    Cuota = cuota(cantidad,tasaInteresAnual,periodos);//ya calculamos la cuota que tienen que pagar con interes fijo
 
     //insertaremos dichos datos a la base de datos
 
@@ -517,7 +551,8 @@ void sacarPrestamo(string moneda, string tipo) {
         registroColones(cedula, cantidad, "Deposito_Prestamo");
 
         cout << "\n" << endl;
-
+        cout << endl;
+        cout << endl;
         cout << "******************************" << endl;
         cout << "Prestamo Aprobado con Exito..." << endl;
         cout << "******************************" << endl;
@@ -542,7 +577,7 @@ void sacarPrestamo(string moneda, string tipo) {
         //actualizamos la tabla
         pstmt->executeUpdate();
 
-
+       
 
 
         // Prepara una declaración para actualizar el saldo
@@ -556,12 +591,13 @@ void sacarPrestamo(string moneda, string tipo) {
         //registramos la transaccion
 
         registroDolares(cedula, cantidad, "Deposito_Prestamo");
-
+        cout << endl;
+        cout << endl;
         cout << "******************************" << endl;
         cout << "Prestamo Aprobado con Exito..." << endl;
         cout << "******************************" << endl;
     }
-
+    
 
     //hasta aqui ya hemos ingresado los datos de las tablas para pedir un prestamo   
 }
@@ -570,7 +606,8 @@ void sacarPrestamo(string moneda, string tipo) {
 //hay que tomar en cuenta esto
 //Ademas manejo de excepciones por aca si el usuario no tiene mas fondos para poder pagarlos
 void pagarPrestamoColones(string tipo) {
-
+    cout << endl;
+    cout << endl;
     cout << "*********************************" << endl;
     cout << "*********Pagar Prestamo*************" << endl;
     cout << "************Colones**************" << endl;
@@ -610,21 +647,20 @@ void pagarPrestamoColones(string tipo) {
 
         //Pagar en efectivo funciona de maravilla
 
-
-    }
-    else {
+        
+    }else {
         //hay que obtener el valor de la cuota del prestamo y almacenarlo en una variable
+        
+        float cuotaRebajo = obtenerCuotaColones(cedula, tipo); 
 
-        float cuotaRebajo = obtenerCuotaColones(cedula, tipo);
-
-
-
+        
+        
         //hay que buscar la cuenta de la persona en colones y quitarle la plata y hacerle este toque de arriba 
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo - ? WHERE cedula = ?"));
 
 
         // Establece los valores de los parámetros
-        pstmt->setDouble(1, cuotaRebajo); // lo que le vamos a restar del saldo
+        pstmt->setDouble(1,cuotaRebajo); // lo que le vamos a restar del saldo
         pstmt->setInt(2, cedula); // cedula de la persona
         pstmt->executeUpdate();
 
@@ -637,7 +673,8 @@ void pagarPrestamoColones(string tipo) {
         pstmt2->setInt(1, cedula); // Cédula específica
         pstmt2->setString(2, tipo); // Tipo específico
         pstmt2->executeUpdate();//actualizamos
-
+        cout << endl;
+        cout << "Pago Realizado con exito ..." << endl;
         //registramos la transaccion
 
         registroColones(cedula, cuotaRebajo, "RETIRO");
@@ -646,6 +683,8 @@ void pagarPrestamoColones(string tipo) {
 }
 
 void pagarPrestamoDolares(string tipo) {
+    cout << endl;
+    cout << endl;
     cout << "*********************************" << endl;
     cout << "*********Pagar Prestamo*************" << endl;
     cout << "************Dolares**************" << endl;
@@ -685,11 +724,11 @@ void pagarPrestamoDolares(string tipo) {
         cout << "Pago en Efectivo Realizado con exito ..." << endl;
     }
     else {
-
+        
         //hay que obtener el valor de la cuota del prestamo y almacenarlo en una variable
 
         float cuotaRebajo = obtenerCuotaDolares(cedula, tipo);
-
+       
 
 
         //hay que buscar la cuenta de la persona en colones y quitarle la plata y hacerle este toque de arriba 
@@ -711,6 +750,8 @@ void pagarPrestamoDolares(string tipo) {
         pstmt2->setString(2, tipo); // Tipo específico
         pstmt2->executeUpdate();//actualizamos
 
+        cout << endl;
+        cout << "Pago Realizado con exito ..." << endl;
         //registro de la transaccion
 
         registroDolares(cedula, cuotaRebajo, "RETIRO");
@@ -752,15 +793,20 @@ string formatearFecha(tm fecha) {
 }
 
 // Funcion para manejar el CDP
-void certificadoDP(int cedula) {
+void certificadoDP() {
+    int cedula;
     int meses;
     double monto, tasaInteres;
     string moneda, opcion, fechaInicioStr, fechaVencimientoStr;
 
+    cout << endl;
+    cout << endl;
     cout << "********************************" << endl;
     cout << "************ CDP ***************" << endl;
     cout << "********************************" << endl;
 
+    cout << "\n Por favor ingresa la cedula  para el CDP: ";
+    cin >> cedula;
     cout << "\n Por favor ingresa la cantidad de meses que desea para el CDP: ";
     cin >> meses;
     cout << "\n Por favor ingresa la moneda: ";
@@ -769,13 +815,13 @@ void certificadoDP(int cedula) {
     cin >> monto;
 
     if (0 < meses && meses <= 2) {
-        tasaInteres = 1.5;
+        tasaInteres = 1.05;
     }
     else if (3 <= meses && meses < 6) {
-        tasaInteres = 2.25;
+        tasaInteres = 1.25;
     }
     else if (6 <= meses) {
-        tasaInteres = 3.75;
+        tasaInteres = 1.50;
     }
     else {
         cout << "Meses ingresado no valido." << endl; // Manejar este error
@@ -786,6 +832,8 @@ void certificadoDP(int cedula) {
     double gananciaInteres = monto * tasaMensual * meses;
     double ganancia = gananciaInteres + monto;
 
+    cout << endl;
+    cout << endl;
     cout << "Para " << meses << ", con un monto de " << monto << ", a una tasa de " << tasaInteres << ", va a tener una ganancia de " << ganancia << "." << endl;
 
     // Implementar esto por si el usuario quiere cancelar
@@ -820,6 +868,11 @@ void certificadoDP(int cedula) {
         pstmt->executeUpdate();
 
         cout << "Su proceso de CDP (en colones) se ha realizado de forma correcta." << endl;
+        
+
+        //agregar el registro en colones
+
+        registroColones(cedula, monto, "CDP");
     }
     else
     {
@@ -831,11 +884,13 @@ void certificadoDP(int cedula) {
         pstmt->executeUpdate();
 
         cout << "Su proceso de CDP (en dolares) se ha realizado de forma correcta." << endl;
+
+        //agregar el registro en Dolares
+        registroDolares(cedula, monto, "CDP");
     }
 
     pstmt->executeUpdate();
 }
-
 
 
 
