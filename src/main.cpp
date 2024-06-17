@@ -184,10 +184,12 @@ void subMenuSacarPrestamo(const string& tipoPrestamo) {
             case 1:
                 cout << "Ha seleccionado sacar prestamo " << tipoPrestamo << " en Dolares." << endl;
                 // Lógica para sacar préstamo específico en dólares
+                sacarPrestamo("Dolares", tipoPrestamo);
                 break;
             case 2:
                 cout << "Ha seleccionado sacar prestamo " << tipoPrestamo << " en Colones." << endl;
                 // Lógica para sacar préstamo específico en colones
+                sacarPrestamo("CRC", tipoPrestamo);
                 break;
             case 3:
                 cout << "Volviendo al menu de Sacar Prestamo..." << endl;
@@ -227,10 +229,12 @@ void menuPagarPrestamo() {
             case 1:
                 cout << "Ha seleccionado pagar prestamo en Dolares." << endl;
                 // Lógica para pagar préstamo en dólares
+                pagarPrestamoDolares("Dolares");
                 break;
             case 2:
                 cout << "Ha seleccionado pagar prestamo en Colones." << endl;
                 // Lógica para pagar préstamo en colones
+                pagarPrestamoColones("CRC");
                 break;
             case 3:
                 cout << "Volviendo al menu de Atencion a Cliente..." << endl;
@@ -270,10 +274,12 @@ void menuDepositar() {
             case 1:
                 cout << "Ha seleccionado depositar en Dolares." << endl;
                 // Lógica para depositar en dólares
+                depositar("Dolares");
                 break;
             case 2:
                 cout << "Ha seleccionado depositar en Colones." << endl;
                 // Lógica para depositar en colones
+                depositar("CRC");
                 break;
             case 3:
                 cout << "Volviendo al menu de Atencion a Cliente..." << endl;
@@ -313,10 +319,12 @@ void menuTransferir() {
             case 1:
                 cout << "Ha seleccionado transferir en Dolares." << endl;
                 // Lógica para transferir en dólares
+                transferir("Dolares");
                 break;
             case 2:
                 cout << "Ha seleccionado transferir en Colones." << endl;
                 // Lógica para transferir en colones
+                transferir("CRC");
                 break;
             case 3:
                 cout << "Volviendo al menu de Atencion a Cliente..." << endl;
@@ -356,10 +364,12 @@ void menuRetirar() {
             case 1:
                 cout << "Ha seleccionado retirar en Dolares." << endl;
                 // Lógica para retirar en dólares
+                retirar("Dolares");
                 break;
             case 2:
                 cout << "Ha seleccionado retirar en Colones." << endl;
                 // Lógica para retirar en colones
+                retirar("CRC");
                 break;
             case 3:
                 cout << "Volviendo al menu de Atencion a Cliente..." << endl;
