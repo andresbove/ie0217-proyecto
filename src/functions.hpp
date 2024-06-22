@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cctype>
+#include <fstream>
 
 //Libreria de sql
 #include "mysql_driver.h"
@@ -414,7 +415,11 @@ float calcularInteresCompuesto(float cantidadInicial, int years, float interesAn
     return interes;
 }
 
+//*******************************************
 //revisar estas formulas
+//*******************************************
+
+
 float cuota(float cantidadInicial, float interesAnual, int periodos) {
     float interesMensual = interesAnual / 12;
     float resultado = cantidadInicial*((interesMensual * pow(1 + interesMensual, periodos)) / pow(1 + interesMensual, periodos - 1));
@@ -477,6 +482,10 @@ float obtenerCuotaDolares(int cedula, string tipo) {
     return cuota;
 
 }
+
+
+
+
 //crear un prestamo
 //segun lo de arriba creemos que ya es suficiente para saber que prestamos iremos a sacar
 void sacarPrestamo(string moneda, string tipo) {
@@ -763,57 +772,82 @@ void pagarPrestamoDolares(string tipo) {
 //genera un informe del estado del prestamo
 //literal es un read en la base de datos
 //solo ocupamos el nombre
+void generarInforme(string moneda) {
+    cout << endl;
+    cout << endl;
+    cout << "*************************************" << endl;
+    cout << "*********Generar Informe*************" << endl;
+    cout << "*************************************" << endl;
+    cout << endl;
+    cout << endl;
 
-void generarInforme() {
     int cedula;
-    string moneda, cedulaString;
+    string cedulaString;
 
     cout << "Por favor introducir su numero de cedula: ";
     cin >> cedula;
 
     cedulaString = to_string(cedula); // Guardar la cedula en un string para el nombre del .txt
 
-    cout << "Por digite la moneda de la cuenta (USD o CRC): ";
-    cin >> moneda;
 
     toUpperCase(moneda);
 
     // Ejecutar el query
-    if (moneda == "CRC" || moneda == "crc") {
-        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT id, cedula, cantidad, estado, fecha FROM registroColones WHERE cedula = ?"));
+    if (moneda == "CRC") {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroColones WHERE cedula = ?"));
         pstmt->setInt(1, cedula);
         res = pstmt->executeQuery();
     }
     else {
-        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT id, cedula, cantidad, estado, fecha FROM registroDolares WHERE cedula = ?"));
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroDolares WHERE cedula = ?"));
         pstmt->setInt(1, cedula);
         res = pstmt->executeQuery();
     }
 
     // Ahora se guardan los resultado en un archivo de texto
-    ofstream outFile(cedulaString + moneda + ".txt");
+    ofstream outFile(cedulaString + "_" + moneda + ".txt");
 
     if (outFile.is_open()) {
         // Columnas del archivo
-        outFile << "id, cedula, cantidad, estado, fecha\n";
+
+        outFile << "----------------------"
+            << "------------------------"
+            << "-------------------------"
+            << "--------------------------"
+            << "-------------------------" << std::endl;
+
+        outFile << "ID \t|\t CEDULA \t|\t  CANTIDAD \t|\t ESTADO \t|\t FECHA " << endl;
+
+        outFile << "----------------------"
+            << "------------------------"
+            << "-------------------------"
+            << "--------------------------"
+            << "-------------------------" << std::endl;
 
         // Hacer escrituras
         while (res->next()) {
-            outFile << res->getInt("id") << ", "
-                << res->getInt("cedula") << ", "
-                << res->getDouble("cantidad") << ", "
-                << res->getString("estado") << ", "
-                << res->getString("fecha") << "\n";
+            outFile  << res->getInt("id") << "\t"
+                << "|" << res->getInt("cedula") << "\t" << "\t"
+                << "|" << res->getDouble("cantidad") << "\t" << "\t" << "\t"
+                << "|" << res->getString("estado") << '\t' << "\t" 
+                << "|" << res->getString("fecha")  << std::endl;
+
+            outFile <<"----------------------"
+                 << "------------------------"
+                <<"-------------------------" 
+                <<"--------------------------" 
+                << "-------------------------" << std::endl;
         }
 
         outFile.close();
-        cout << "Las transacciones se han escrito al archivo " << cedulaString + moneda << ".txt" << endl;
+        cout << "Las transacciones se han escrito al archivo " << cedulaString + "_" + moneda << ".txt" << endl;
     }
     else {
         cerr << "No se pudo abrir el archivo " << cedulaString + moneda << " para hacer escrituras." << endl;
     }
     // REVISAR implementar error si no se encuentra una cedula ingresada
 }
+
 
 tm calcularFechaActual() {
     auto now = chrono::system_clock::now();
