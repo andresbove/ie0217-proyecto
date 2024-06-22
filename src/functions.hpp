@@ -764,8 +764,55 @@ void pagarPrestamoDolares(string tipo) {
 //literal es un read en la base de datos
 //solo ocupamos el nombre
 
-void generarInforme(string identificacion, string moneda) {
-    cout << "generar informe  de un prestamo teniendo en cuenta identificacion y  moneda" << endl;
+void generarInforme() {
+    int cedula;
+    string moneda, cedulaString;
+
+    cout << "Por favor introducir su numero de cedula: ";
+    cin >> cedula;
+
+    cedulaString = to_string(cedula); // Guardar la cedula en un string para el nombre del .txt
+
+    cout << "Por digite la moneda de la cuenta (USD o CRC): ";
+    cin >> moneda;
+
+    toUpperCase(moneda);
+
+    // Ejecutar el query
+    if (moneda == "CRC" || moneda == "crc") {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT id, cedula, cantidad, estado, fecha FROM registroColones WHERE cedula = ?"));
+        pstmt->setInt(1, cedula);
+        res = pstmt->executeQuery();
+    }
+    else {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT id, cedula, cantidad, estado, fecha FROM registroDolares WHERE cedula = ?"));
+        pstmt->setInt(1, cedula);
+        res = pstmt->executeQuery();
+    }
+
+    // Ahora se guardan los resultado en un archivo de texto
+    ofstream outFile(cedulaString + moneda + ".txt");
+
+    if (outFile.is_open()) {
+        // Columnas del archivo
+        outFile << "id, cedula, cantidad, estado, fecha\n";
+
+        // Hacer escrituras
+        while (res->next()) {
+            outFile << res->getInt("id") << ", "
+                << res->getInt("cedula") << ", "
+                << res->getDouble("cantidad") << ", "
+                << res->getString("estado") << ", "
+                << res->getString("fecha") << "\n";
+        }
+
+        outFile.close();
+        cout << "Las transacciones se han escrito al archivo " << cedulaString + moneda << ".txt" << endl;
+    }
+    else {
+        cerr << "No se pudo abrir el archivo " << cedulaString + moneda << " para hacer escrituras." << endl;
+    }
+    // REVISAR implementar error si no se encuentra una cedula ingresada
 }
 
 tm calcularFechaActual() {
