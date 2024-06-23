@@ -69,6 +69,22 @@ void registroDolares(int cedula, float cantidad, string estado) {
 void toUpperCase(string &palabra) {
     transform(palabra.begin(), palabra.end(), palabra.begin(), [](unsigned char c) {return toupper(c);});
 }
+
+// Para verificar que lo ingresado son letras
+bool validarLetras(const string& str) {
+    return regex_match(str, regex("^[A-Za-z]+$"));
+}
+
+// Para verificar que lo ingresado son digitos
+bool validarDigitos(const string& str) {
+    return regex_match(str, regex("^[0-9]+$"));
+}
+
+// Verificar correro
+bool validarCorreo(const string& str) {
+    return regex_match(str, regex(R"(^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$)"));
+}
+
 void connectDB() {
     try
     {
@@ -115,24 +131,68 @@ void crear_usuario() {
     cout << "*****Creando Usuario*****" << endl;
     cout << "***************************" << endl;
 
+    // Validar cedula (solo digitos)
+    do {
+        cout << "\n Por favor ingresa el cedula: ";
+        cin >> cedula;
+        if (!validarDigitos(cedula)) {
+            cout << "La cedula debe contener solo números." << endl;
+        }
+    } while (!validarDigitos(cedula)); // Siempre y cuando el regex devuelva False
 
-    cout << "\n Por favor ingresa el cedula: ";
-    cin >> cedula;
-    cout << "Por favor ingresa el nombre: ";
-    cin >> nombre;
-    cout << "\n Por favor ingresa el primer apellido: ";
-    cin >> apellido1;
-    cout << "\n Por favor ingresa el segundo apellido: ";
-    cin >> apellido2;
+    // Validar nombre (solo letras)
+    do {
+        cout << "Por favor ingresa el nombre: ";
+        cin >> nombre;
+        if (!validarLetras(nombre)) {
+            cout << "El nombre solo debe contener letras." << endl;
+        }
+    } while (!validarLetras(nombre));
+
+    // Validar apellido1 (solo letras)
+    do {
+        cout << "\n Por favor ingresa el primer apellido: ";
+        cin >> apellido1;
+        if (!validarLetras(apellido1)) {
+            cout << "El primer apellido solo debe contener letras." << endl;
+        }
+    } while (!validarLetras(apellido1));
+
+    // Validar apellido2 (solo letras)
+    do {
+        cout << "\n Por favor ingresa el segundo apellido: ";
+        cin >> apellido2;
+        if (!validarLetras(apellido2)) {
+            cout << "El segundo apellido solo debe contener letras." << endl;
+        }
+    } while (!validarLetras(apellido2));
+
+    // Validar provincia (solo letras)
+    do {
     cout << "\n Por favor ingresa la provincia: ";
     cin >> Provincia;
-    cout << "\n Por favor ingresa el telefono: ";
-    cin >> telefono;
-    cout << "\n Por favor ingresa el correo: ";
-    cin >> correo;
+        if (!validarLetras(Provincia)) {
+            cout << "La provincia solo debe contener letras." << endl;
+        }
+    } while (!validarLetras(Provincia));
 
-    
+    // Validar telefono (solo digitos)
+    do {
+        cout << "\n Por favor ingresa el telefono: ";
+        cin >> telefono;
+        if (!validarDigitos(telefono)) {
+            cout << "El telefono solo debe contener numeros." << endl;
+        }
+    } while (!validarDigitos(telefono));
 
+    // Validar correo (caso especial)
+    do {
+        cout << "\n Por favor ingresa el correo: ";
+        cin >> correo;
+        if (!validarCorreo(correo)) {
+            cout << "El correo solo debe seguir el patron (letras o numeros)@(letras).com." << endl;
+        }
+    } while (!validarCorreo(correo));
 
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO Cliente (cedula, nombre, apellido1, apellido2, provincia, telefono, correo) VALUES (?,?, ?, ?, ?, ?, ?)"));
     // Establece los valores de los parámetros
@@ -148,7 +208,6 @@ void crear_usuario() {
     cout << endl;
     cout << "\n Se agrego el usuario de forma exitosa .... " << endl;
 };
-
 
 void crearCuentaColones() {
     //cuentaColones cuenta;
