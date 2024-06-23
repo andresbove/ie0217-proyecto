@@ -840,7 +840,11 @@ void generarInforme(string moneda) {
         }
 
         outFile.close();
+        cout << endl;
+        cout << "--------------------------------------------------------------------------------------------" << endl;
         cout << "Las transacciones se han escrito al archivo " << cedulaString + "_" + moneda << ".txt" << endl;
+        cout << "--------------------------------------------------------------------------------------------" << endl;
+        cout << endl;
     }
     else {
         cerr << "No se pudo abrir el archivo " << cedulaString + moneda << " para hacer escrituras." << endl;
@@ -848,6 +852,9 @@ void generarInforme(string moneda) {
     // REVISAR implementar error si no se encuentra una cedula ingresada
 }
 
+void generarInformePrestamo() {
+    cout << "Hola" << endl;
+}
 
 tm calcularFechaActual() {
     auto now = chrono::system_clock::now();
