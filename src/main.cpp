@@ -13,31 +13,34 @@ void menuDepositar();
 void menuTransferir();
 void menuRetirar();
 void subMenuSacarPrestamo(const string& tipoPrestamo);
+void crear_cuenta_colones();
+void crear_cuenta_dolares();
 
 int main() {
     int opcion;
 
-    connectDB();
-    //Cliente usuario;
+    connectDB(); // Conectar a la base de datos
     do {
         cout << "\n----- Menu -----" << endl;
         cout << "1- Crear Usuario" << endl;
         cout << "2- Atencion a cliente" << endl;
         cout << "3- Informacion general sobre prestamos bancarios" << endl;
         cout << "4- Salir" << endl;
+        cout << "5- Crear cuenta en colones" << endl;
+        cout << "6- Crear cuenta en dólares" << endl;
         cout << "----------------" << endl;
-        cout << "Ingrese su opcion (1, 2, 3 o 4): ";
+        cout << "Ingrese su opcion (1, 2, 3, 4, 5 o 6): ";
 
         try {
             cin >> opcion;
 
             if (cin.fail()) {
-                throw runtime_error("Opcion no valida, debe ingresar 1, 2, 3 o 4.\n");
+                throw runtime_error("Opcion no valida, debe ingresar un número del 1 al 6.\n");
             }
 
             switch (opcion) {
             case 1:
-                crear_usuario();
+                crear_usuario(); // Crear usuario y volver al menú principal
                 break;
             case 2:
                 menuAtencionCliente();
@@ -47,6 +50,12 @@ int main() {
                 break;
             case 4:
                 cout << "Saliendo del programa..." << endl;
+                break;
+            case 5:
+                crear_cuenta_colones();
+                break;
+            case 6:
+                crear_cuenta_dolares();
                 break;
             default:
                 cout << "Opcion no valida, intente de nuevo." << endl;
@@ -58,7 +67,7 @@ int main() {
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descartar opcion ingresada
         }
 
-    } while (opcion != 3);
+    } while (opcion != 4); // Continuar hasta que se elija salir
 
     return 0;
 }
@@ -122,7 +131,7 @@ void menuAtencionCliente() {
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descartar opcion ingresada
         }
 
-    } while (opcion != 7);
+    } while (opcion != 8);
 }
 
 void menuSacarPrestamo() {
@@ -239,7 +248,7 @@ void menuPagarPrestamo() {
                 cout << "Ha seleccionado pagar prestamo en Dolares." << endl;
                 cout << "Que tipo de prestamo quieres pagar: ";
                 cin >> tipo;
-                
+
                 toUpperCase(tipo);
                 cout << endl;
 
@@ -453,4 +462,16 @@ void menuInformacionPrestamos() {
         }
 
     } while (opcion != 4);
+}
+
+void crear_cuenta_colones() {
+    cout << "Creando cuenta en colones..." << endl;
+    // Lógica para crear cuenta en colones
+    // ...
+}
+
+void crear_cuenta_dolares() {
+    cout << "Creando cuenta en dólares..." << endl;
+    // Lógica para crear cuenta en dólares
+    // ...
 }
