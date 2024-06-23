@@ -852,8 +852,115 @@ void generarInforme(string moneda) {
     // REVISAR implementar error si no se encuentra una cedula ingresada
 }
 
-void generarInformePrestamo() {
-    cout << "Hola" << endl;
+void generarInformePrestamo(string tipo) {
+    cout << endl;
+    cout << endl;
+    cout << "*************************************" << endl;
+    cout << "*********Generar Informe Prestamo*************" << endl;
+    cout << "*************************************" << endl;
+    cout << endl;
+    cout << endl;
+
+    int cedula;
+    string cedulaString, moneda;
+    int periodosA;
+    int cuotasRest{};
+    float cuotav{};
+    float cantidadRe;
+
+    cout << "Por favor introducir su numero de cedula: ";
+    cin >> cedula; 
+    cout << endl;
+    cout << "Por favor introducir la moneda (CRC o USD): ";
+    cin >> moneda;
+
+    cedulaString = to_string(cedula); // Guardar la cedula en un string para el nombre del .txt
+
+
+    toUpperCase(moneda);
+
+    // Ejecutar el query
+    if (moneda == "CRC" || moneda == "crc") {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM prestamo_Colones WHERE cedula = ? and tipo = ?"));
+        pstmt->setInt(1, cedula);
+        pstmt->setString(2, tipo);
+        res = pstmt->executeQuery();
+    }
+    else {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM prestamo_Dolares WHERE cedula = ? and tipo = ?"));
+        pstmt->setInt(1, cedula);
+        pstmt->setString(2, tipo);
+        res = pstmt->executeQuery();
+    }
+
+    // Ahora se guardan los resultado en un archivo de texto
+    ofstream outFile(cedulaString + "_" + tipo + ".txt");
+
+    if (outFile.is_open()) {
+        // Columnas del archivo
+
+        outFile << "----------------------"
+            << "------------------------"
+            << "-------------------------"
+            << "--------------------------"
+            << "--------------------------" << std::endl;
+
+        outFile << "CEDULA \t   | CANTIDAD \t |  PERIODOS \t |  CUOTA \t |  SALDO_PENDIENTE \t |  Cuotas_Restantes \t |  Interes_anual | Tipo" << endl;
+
+        outFile << "----------------------"
+            << "------------------------"
+            << "-------------------------"
+            << "--------------------------"
+            << "--------------------------" << std::endl;
+
+        // Hacer escrituras
+        while (res->next()) {
+            outFile
+                << "|" << res->getInt("cedula") << "   "
+                << "|" << res->getDouble("cantidad") << "\t  "
+                << "|" << res->getInt("periodos") << '\t' << "\t "
+                << "|" << res->getDouble("cuota") << "\t "
+                << "|" << res->getDouble("saldoPendiente") << "\t" << "\t "
+                << "|" << res->getInt("cuotasRestantes") << "\t" << "\t" << "\t "
+                << "|" << res->getDouble("interesAnual") << "\t  "
+                << "|" << res->getString("tipo") << endl;
+
+            outFile << "----------------------"
+                << "------------------------"
+                << "-------------------------"
+                << "--------------------------"
+                << "--------------------------" << endl;
+
+            periodosA = res->getInt("periodos");
+            cuotasRest = res->getInt("cuotasRestantes");
+            cuotav = res->getInt("cuota");
+            cantidadRe = res->getDouble("saldoPendiente");
+
+        }
+        int cuotasMomento = periodosA - cuotasRest;
+        float valorPagado = cuotasMomento * cuotav;
+
+        //aqui agregamos algo de informacion general
+        outFile << endl << endl;
+        outFile << "-----------------------------------" << endl;
+        outFile << "Cuotas Pagadas hasta el momento: "  << cuotasMomento << endl;
+        outFile << "-----------------------------------" << endl;
+        outFile << "Dinero abonado hasta el momento: " << valorPagado << endl;
+        outFile << "-----------------------------------" << endl;
+        outFile << "Cantidad de dinero pendiente a pagar: " << cantidadRe << endl;
+        outFile << "-----------------------------------" << endl;
+
+        outFile.close();
+        cout << endl;
+        cout << "--------------------------------------------------------------------------------------------" << endl;
+        cout << "Las transacciones se han escrito al archivo " << cedulaString + "_" + tipo
+            << ".txt" << endl;
+        cout << "--------------------------------------------------------------------------------------------" << endl;
+        cout << endl;
+    }
+    else {
+        cerr << "No se pudo abrir el archivo " << cedulaString + moneda << " para hacer escrituras." << endl;
+    }
 }
 
 tm calcularFechaActual() {

@@ -495,15 +495,17 @@ void menuInformacionPrestamos() {
             switch (opcion) {
             case 1:
                 cout << "Ha seleccionado Prestamo Personal." << endl;
+                generarInformePrestamo("PERSONAL");
                 // Lógica para información de préstamo personal
                 break;
             case 2:
                 cout << "Ha seleccionado Prestamo Prendario." << endl;
                 // Lógica para información de préstamo prendario
+                generarInformePrestamo("PRENDARIO");
                 break;
             case 3:
                 cout << "Ha seleccionado Prestamo Hipotecario." << endl;
-                // Lógica para información de préstamo hipotecario
+                generarInformePrestamo("HIPOTECARIO");
                 break;
             case 4:
                 menuPrincipal();
