@@ -792,64 +792,74 @@ void generarInforme(string moneda) {
 
     toUpperCase(moneda);
 
-    // Ejecutar el query
-    if (moneda == "CRC") {
-        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroColones WHERE cedula = ?"));
-        pstmt->setInt(1, cedula);
-        res = pstmt->executeQuery();
-    }
-    else {
-        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroDolares WHERE cedula = ?"));
-        pstmt->setInt(1, cedula);
-        res = pstmt->executeQuery();
-    }
-
-    // Ahora se guardan los resultado en un archivo de texto
-    ofstream outFile(cedulaString + "_" + moneda + ".txt");
-
-    if (outFile.is_open()) {
-        // Columnas del archivo
-
-        outFile << "----------------------"
-            << "------------------------"
-            << "-------------------------"
-            << "--------------------------"
-            << "-------------------------" << std::endl;
-
-        outFile << "ID \t|\t CEDULA \t|\t  CANTIDAD \t|\t ESTADO \t|\t FECHA " << endl;
-
-        outFile << "----------------------"
-            << "------------------------"
-            << "-------------------------"
-            << "--------------------------"
-            << "-------------------------" << std::endl;
-
-        // Hacer escrituras
-        while (res->next()) {
-            outFile  << res->getInt("id") << "\t"
-                << "|" << res->getInt("cedula") << "\t" << "\t"
-                << "|" << res->getDouble("cantidad") << "\t" << "\t" << "\t"
-                << "|" << res->getString("estado") << '\t' << "\t" 
-                << "|" << res->getString("fecha")  << std::endl;
-
-            outFile <<"----------------------"
-                 << "------------------------"
-                <<"-------------------------" 
-                <<"--------------------------" 
-                << "-------------------------" << std::endl;
+    try {
+        // Ejecutar el query
+        if (moneda == "CRC") {
+            std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroColones WHERE cedula = ?"));
+            pstmt->setInt(1, cedula);
+            res = pstmt->executeQuery();
+        }
+        else {
+            std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroDolares WHERE cedula = ?"));
+            pstmt->setInt(1, cedula);
+            res = pstmt->executeQuery();
         }
 
-        outFile.close();
-        cout << endl;
-        cout << "--------------------------------------------------------------------------------------------" << endl;
-        cout << "Las transacciones se han escrito al archivo " << cedulaString + "_" + moneda << ".txt" << endl;
-        cout << "--------------------------------------------------------------------------------------------" << endl;
-        cout << endl;
+        // Verificar si la cédula existe en la base de datos
+        if (!res->next()) {
+            std::cerr << "Error: La cedula ingresada no existe en la base de datos." << std::endl;
+            return;
+        }
+
+        // Ahora se guardan los resultado en un archivo de texto
+        ofstream outFile(cedulaString + "_" + moneda + ".txt");
+
+        if (outFile.is_open()) {
+            // Columnas del archivo
+
+            outFile << "----------------------"
+                << "------------------------"
+                << "-------------------------"
+                << "--------------------------"
+                << "-------------------------" << std::endl;
+
+            outFile << "ID \t|\t CEDULA \t|\t  CANTIDAD \t|\t ESTADO \t|\t FECHA " << endl;
+
+            outFile << "----------------------"
+                << "------------------------"
+                << "-------------------------"
+                << "--------------------------"
+                << "-------------------------" << std::endl;
+
+            // Hacer escrituras
+            while (res->next()) {
+                outFile << res->getInt("id") << "\t"
+                    << "|" << res->getInt("cedula") << "\t" << "\t"
+                    << "|" << res->getDouble("cantidad") << "\t" << "\t" << "\t"
+                    << "|" << res->getString("estado") << '\t' << "\t"
+                    << "|" << res->getString("fecha") << std::endl;
+
+                outFile << "----------------------"
+                    << "------------------------"
+                    << "-------------------------"
+                    << "--------------------------"
+                    << "-------------------------" << std::endl;
+            }
+
+            outFile.close();
+            cout << endl;
+            cout << "--------------------------------------------------------------------------------------------" << endl;
+            cout << "Las transacciones se han escrito al archivo " << cedulaString + "_" + moneda << ".txt" << endl;
+            cout << "--------------------------------------------------------------------------------------------" << endl;
+            cout << endl;
+        }
+        else {
+            cerr << "No se pudo abrir el archivo " << cedulaString + moneda << " para hacer escrituras." << endl;
+        }
     }
-    else {
-        cerr << "No se pudo abrir el archivo " << cedulaString + moneda << " para hacer escrituras." << endl;
+    catch (sql::SQLException& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
     }
-    // REVISAR implementar error si no se encuentra una cedula ingresada
 }
 
 void generarInformePrestamo(string tipo) {
