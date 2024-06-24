@@ -67,7 +67,7 @@ void registroDolares(int cedula, float cantidad, string estado) {
 }
 
 
-void toUpperCase(string &palabra) {
+void toUpperCase(string& palabra) {
     transform(palabra.begin(), palabra.end(), palabra.begin(), [](unsigned char c) {return toupper(c);});
 }
 
@@ -108,7 +108,7 @@ int validarCedula() {
 
         // Validar si input es valido
         if (!validarDigitos(cedulaString)) {
-            cout << "La cedula solo debe contener numeros." << endl;
+            cout << "La cedula solo debe contener numeros.\n" << endl;
             continue;
         }
 
@@ -123,7 +123,7 @@ int validarCedula() {
 
             // Verificar si la cédula está en la base de datos
             if (!res->next()) {
-                cout << "Error: La cedula ingresada no existe en la base de datos." << endl;
+                cout << "Error: La cedula ingresada no existe en la base de datos.\n" << endl;
                 continue;
             }
 
@@ -131,7 +131,7 @@ int validarCedula() {
 
         }
         catch (SQLException& e) {
-            cerr << "Error al verificar la cedula en la base de datos: " << e.what() << endl;
+            cerr << "Error al verificar la cedula en la base de datos: \n" << e.what() << endl;
             return -1;
         }
 
@@ -150,7 +150,7 @@ float validarSaldo() {
 
         // Validar que lo ingresado sea un float o entero
         if (!validarFloat(saldoString)) {
-            cout << "El saldo solo debe contener numeros y/o 1 punto decimal." << endl;
+            cout << "El saldo solo debe contener numeros y/o 1 punto decimal.\n" << endl;
         }
     } while (!validarFloat(saldoString));
 
@@ -244,8 +244,8 @@ void crear_usuario() {
 
     // Validar provincia (solo letras)
     do {
-    cout << "\n Por favor ingresa la provincia: ";
-    cin >> Provincia;
+        cout << "\n Por favor ingresa la provincia: ";
+        cin >> Provincia;
         if (!validarLetras(Provincia)) {
             cout << "La provincia solo debe contener letras." << endl;
         }
@@ -319,12 +319,9 @@ void crearCuentaDolares() {
     cout << "*********************************" << endl;
     int cedula;
     float saldo;
-    cout << "Creando nueva cuenta en dolares" << endl;
-    cout << "Por favor ingresa la cedula: ";
-    cin >> cedula;
-    cout << "\n Por favor ingresa el saldo inicial a depositar en dolares: ";
-    cin >> saldo;
 
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+    saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
 
     //lamada a bases de datos INSERT
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaDolares (cedula, saldo) VALUES (?, ?)"));
@@ -350,8 +347,8 @@ void depositar(string moneda) {
     cout << "*********Depositando*************" << endl;
     cout << "*********************************" << endl;
 
-    cout << "\n Por favor ingresa la cedula: ";
-    cin >> cedula;
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+
     cout << "\n Por favor ingresa la cantidad a depositar: ";
     cin >> deposito;
     //cout << "\n Por favor ingresa la moneda: ";
@@ -400,22 +397,19 @@ void depositar(string moneda) {
 
 //Pendiente: crear excepcion para que solo puedan ingresar monedas USD Y CRC
 void retirar(string moneda) {
-
     int cedula;
     float retiro;
-    //string moneda;
+
     cout << endl;
     cout << endl;
     cout << "*********************************" << endl;
     cout << "*********Retirando*************" << endl;
     cout << "*********************************" << endl;
 
-    cout << "Por favor ingresa la cedula: ";
-    cin >> cedula;
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+
     cout << "\n Por favor ingresa la cantidad a retirar: ";
     cin >> retiro;
-    //cout << "\n Por favor ingresa la moneda: ";
-    //cin >> moneda;
 
     //llamada a la base de datos
     //sera un update
@@ -455,11 +449,9 @@ void retirar(string moneda) {
 
 void transferir(string moneda) {
     //esta es una mezcla de las funciones retirar y depositar
-
     int depositante;
     float cantidad;
     int destinatario;
-    //string moneda;
 
     cout << endl;
     cout << endl;
@@ -467,17 +459,21 @@ void transferir(string moneda) {
     cout << "*********Transfiriendo*************" << endl;
     cout << "*********************************" << endl;
 
-    cout << "Por favor ingresa la cedula depositante: ";
-    cin >> depositante;
-    cout << "\n Por favor ingresa la cantidad a transferir: ";
+    //cout << "Por favor ingresa la cedula depositante: ";
+    //cin >> depositante;
+    cout << "\n(Datos de depositante) ";
+    depositante = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+
+    cout << "\nPor favor ingresa la cantidad a transferir: ";
     cin >> cantidad;
-    cout << "\n Por favor ingresa la cedula del destinatario: ";
-    cin >> destinatario;
-    //cout << "\n Por favor ingresa la moneda: ";
-    //cin >> moneda;
+
+    //cout << "\n Por favor ingresa la cedula del destinatario: ";
+    //cin >> destinatario;
+    cout << "\n(Datos del destinatario) ";
+    destinatario = validarCedula();
 
     if (moneda == "CRC") {
-    
+
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo - ? WHERE cedula = ?"));
 
         // Establece los valores de los parámetros
@@ -639,8 +635,7 @@ void sacarPrestamo(string moneda, string tipo) {
 
     //cout << "\nEn que moneda desea solicitar el prestamo: ";
     //cin >> moneda;
-    cout << "\nPor favor ingresa la cedula: ";
-    cin >> cedula;
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
     cout << "\nPor favor ingresa la cantidad de dinero del prestamo: ";
     cin >> cantidad;
     cout << "\nPor favor ingresa los meses a los cuales sera el prestamo: ";
@@ -758,8 +753,7 @@ void pagarPrestamoColones(string tipo) {
     string eleccion;
     //si es falso se pagara con la cuenta que tenga asociada al banco 
 
-    cout << "Por favor introducir su numero de cedula: ";
-    cin >> cedula;
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
 
     //implementar excepciones aqui
     cout << " \n Pagara con Efectivo (Y o N): ";
@@ -833,8 +827,7 @@ void pagarPrestamoDolares(string tipo) {
     int cedula;
     bool efectivo;
     string eleccion;
-    cout << "Por favor introducir su numero de cedula: ";
-    cin >> cedula;
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
     //si es falso se pagara con la cuenta que tenga asociada al banco 
 
     //implementar excepciones aqui
@@ -915,8 +908,7 @@ void generarInforme(string moneda) {
     int cedula;
     string cedulaString;
 
-    cout << "Por favor introducir su numero de cedula: ";
-    cin >> cedula;
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
 
     cedulaString = to_string(cedula); // Guardar la cedula en un string para el nombre del .txt
 
@@ -1009,8 +1001,7 @@ void generarInformePrestamo(string tipo) {
     float cuotav{};
     float cantidadRe;
 
-    cout << "Por favor introducir su numero de cedula: ";
-    cin >> cedula; 
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
     cout << endl;
     cout << "Por favor introducir la moneda (CRC o USD): ";
     cin >> moneda;
@@ -1141,13 +1132,13 @@ void certificadoDP() {
     cout << "************ CDP ***************" << endl;
     cout << "********************************" << endl;
 
-    cout << "\n Por favor ingresa la cedula  para el CDP: ";
-    cin >> cedula;
-    cout << "\n Por favor ingresa la cantidad de meses que desea para el CDP: ";
+    cout << "\n(Certificado de deposito a plazo): ";
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+    cout << "\nPor favor ingresa la cantidad de meses que desea para el CDP: ";
     cin >> meses;
-    cout << "\n Por favor ingresa la moneda: ";
+    cout << "\nPor favor ingresa la moneda: ";
     cin >> moneda;
-    cout << "\n Por favor ingrese el monto inicial: ";
+    cout << "\nPor favor ingrese el monto inicial: ";
     cin >> monto;
 
     if (0 < meses && meses <= 2) {
