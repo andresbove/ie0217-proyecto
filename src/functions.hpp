@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cctype>
 #include <fstream>
+#include <regex>
 
 //Libreria de sql
 #include "mysql_driver.h"
@@ -80,9 +81,83 @@ bool validarDigitos(const string& str) {
     return regex_match(str, regex("^[0-9]+$"));
 }
 
+// Validar float ingresado por el usuario
+bool validarFloat(const string& str) {
+    regex floatRegex(R"([0-9]*\.?[0-9]+)"); // Recuerde que por ser float siempre va a ser #.#
+    return regex_match(str, floatRegex);
+}
+
 // Verificar correro
 bool validarCorreo(const string& str) {
     return regex_match(str, regex(R"(^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$)"));
+}
+
+// Convertir de string a float
+float stringToFloat(const string& str) {
+    return stof(str);
+}
+
+// Funcion para validar cedula, que se espera que sean ints, ademas verifica que la cedula esté en la base de datos (por esto no usar en crearUsuario)
+int validarCedula() {
+    int cedula;
+    string cedulaString;
+
+    do {
+        cout << "Por favor ingresa la cedula: ";
+        cin >> cedulaString;
+
+        // Validar si input es valido
+        if (!validarDigitos(cedulaString)) {
+            cout << "La cedula solo debe contener numeros." << endl;
+            continue;
+        }
+
+        // Convertir string a int
+        cedula = stoi(cedulaString);
+
+        try {
+            // Verificar si la cédula existe en la base de datos
+            unique_ptr<PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM Cliente WHERE cedula = ?"));
+            pstmt->setInt(1, cedula);
+            unique_ptr<ResultSet> res(pstmt->executeQuery());
+
+            // Verificar si la cédula está en la base de datos
+            if (!res->next()) {
+                cout << "Error: La cedula ingresada no existe en la base de datos." << endl;
+                continue;
+            }
+
+            return cedula; // Se devuelve int porque así es como está el dato en la base de datos
+
+        }
+        catch (SQLException& e) {
+            cerr << "Error al verificar la cedula en la base de datos: " << e.what() << endl;
+            return -1;
+        }
+
+    } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
+}
+
+// Funcion que le solicita al usuario el saldo y verifica que sea el formato correcto
+float validarSaldo() {
+    float saldo;
+    string saldoString;
+
+    // Validar saldo
+    do {
+        cout << "\nPor favor ingresa el saldo inicial a depositar en colones: ";
+        cin >> saldoString;
+
+        // Validar que lo ingresado sea un float o entero
+        if (!validarFloat(saldoString)) {
+            cout << "El saldo solo debe contener numeros y/o 1 punto decimal." << endl;
+        }
+    } while (!validarFloat(saldoString));
+
+    // Convertir de string a float
+    saldo = stringToFloat(saldoString);
+
+    return saldo; // Devolver float porque asi es como lo requiere la base de datos
 }
 
 void connectDB() {
@@ -219,13 +294,10 @@ void crearCuentaColones() {
     cout << "*****Creando Cuenta Colones******" << endl;
     cout << "*********************************" << endl;
 
-    cout << "Por favor ingresa la cedula: ";
-    cin >> cedula;
-    cout << "\n Por favor ingresa el saldo inicial a depositar en colones: ";
-    cin >> saldo;
+    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+    saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
 
-  
-    //lamada a bases de datos INSERT
+    //llamada a bases de datos INSERT
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaColones (cedula, saldo) VALUES (?, ?)"));
     pstmt->setInt(1, cedula); // Cédula del cliente
     pstmt->setDouble(2, saldo); // Saldo inicial
@@ -854,19 +926,19 @@ void generarInforme(string moneda) {
     try {
         // Ejecutar el query
         if (moneda == "CRC") {
-            std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroColones WHERE cedula = ?"));
+            unique_ptr<PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroColones WHERE cedula = ?"));
             pstmt->setInt(1, cedula);
             res = pstmt->executeQuery();
         }
         else {
-            std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroDolares WHERE cedula = ?"));
+            unique_ptr<PreparedStatement> pstmt(con->prepareStatement("SELECT * FROM registroDolares WHERE cedula = ?"));
             pstmt->setInt(1, cedula);
             res = pstmt->executeQuery();
         }
 
         // Verificar si la cédula existe en la base de datos
         if (!res->next()) {
-            std::cerr << "Error: La cedula ingresada no existe en la base de datos." << std::endl;
+            cerr << "Error: La cedula ingresada no existe en la base de datos." << endl;
             return;
         }
 
@@ -880,7 +952,7 @@ void generarInforme(string moneda) {
                 << "------------------------"
                 << "-------------------------"
                 << "--------------------------"
-                << "-------------------------" << std::endl;
+                << "-------------------------" << endl;
 
             outFile << "ID \t|\t CEDULA \t|\t  CANTIDAD \t|\t ESTADO \t|\t FECHA " << endl;
 
@@ -888,7 +960,7 @@ void generarInforme(string moneda) {
                 << "------------------------"
                 << "-------------------------"
                 << "--------------------------"
-                << "-------------------------" << std::endl;
+                << "-------------------------" << endl;
 
             // Hacer escrituras
             while (res->next()) {
@@ -896,13 +968,13 @@ void generarInforme(string moneda) {
                     << "|" << res->getInt("cedula") << "\t" << "\t"
                     << "|" << res->getDouble("cantidad") << "\t" << "\t" << "\t"
                     << "|" << res->getString("estado") << '\t' << "\t"
-                    << "|" << res->getString("fecha") << std::endl;
+                    << "|" << res->getString("fecha") << endl;
 
                 outFile << "----------------------"
                     << "------------------------"
                     << "-------------------------"
                     << "--------------------------"
-                    << "-------------------------" << std::endl;
+                    << "-------------------------" << endl;
             }
 
             outFile.close();
@@ -916,8 +988,8 @@ void generarInforme(string moneda) {
             cerr << "No se pudo abrir el archivo " << cedulaString + moneda << " para hacer escrituras." << endl;
         }
     }
-    catch (sql::SQLException& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    catch (SQLException& e) {
+        cerr << "Error: " << e.what() << endl;
     }
 }
 
