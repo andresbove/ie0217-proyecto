@@ -49,7 +49,6 @@ void menuPrincipal() {
 
             switch (opcion) {
             case 1:
-                generarInforme("CRC");
                 crear_usuario();
                 break;
             case 2:
@@ -114,7 +113,7 @@ void menuAtencionCliente() {
                 menuPagarPrestamo();
                 break;
             case 5:
-                
+
                 menuGenerarInforme();
                 break;
             case 6:
@@ -259,7 +258,7 @@ void menuPagarPrestamo() {
                 cout << "Ha seleccionado pagar prestamo en Dolares." << endl;
                 cout << "Que tipo de prestamo quieres pagar: ";
                 cin >> tipo;
-                
+
                 toUpperCase(tipo);
                 cout << endl;
 
