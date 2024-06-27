@@ -625,7 +625,7 @@ float calcularInteresCompuesto(float cantidadInicial, int years, float interesAn
 
 float cuota(float cantidadInicial, float interesAnual, int periodos) {
     float interesMensual = interesAnual / 12;
-    float resultado = cantidadInicial * ((interesMensual * pow(1 + interesMensual, periodos)) / pow(1 + interesMensual, periodos - 1));
+    float resultado = (cantidadInicial * (interesMensual * (pow(1 + interesMensual, periodos)))) / (pow(1 + interesMensual, periodos) - 1);
     return resultado;
 }
 
