@@ -4,6 +4,37 @@
  * Funcion para validar la cédula ingresada por el usuario, que se espera que sean ints, ademas verifica que la
  * cedula esté en la base de datos (por esto no usar en crearUsuario).
 */
+
+void toUpperCase(string& palabra) {
+    transform(palabra.begin(), palabra.end(), palabra.begin(), [](unsigned char c) {return toupper(c);});
+}
+
+// Para verificar que lo ingresado son letras
+bool validarLetras(const string& str) {
+    return regex_match(str, regex("^[A-Za-z]+$"));
+}
+
+// Para verificar que lo ingresado son digitos
+bool validarDigitos(const string& str) {
+    return regex_match(str, regex("^[0-9]+$"));
+}
+
+// Validar float ingresado por el usuario
+bool validarFloat(const string& str) {
+    regex floatRegex(R"([0-9]*\.?[0-9]+)"); // Recuerde que por ser float siempre va a ser #.#
+    return regex_match(str, floatRegex);
+}
+
+// Verificar correro
+bool validarCorreo(const string& str) {
+    return regex_match(str, regex(R"(^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$)"));
+}
+
+// Convertir de string a float
+float stringToFloat(const string& str) {
+    return stof(str);
+}
+
 int validarCedula() {
     int cedula;
     string cedulaString;
