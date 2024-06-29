@@ -1,3 +1,7 @@
+/**
+ * @file functions.hpp
+ * Aqui es donde van las definiciones de las funciones y ademas, el manejo de la base de datos.
+*/
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
 
@@ -41,7 +45,12 @@ sql::Statement* stmt;
 sql::ResultSet* res;
 
 
-
+/**
+ * Encargado de insertar los datos relacionados a la tabla de registroColones.
+ * @param[in] cedula
+ * @param[in] cantidad
+ * @param[in] estado
+*/
 void registroColones(int cedula, float cantidad, string estado) {
 
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO registroColones (cedula, cantidad, estado) VALUES (?, ?, ?)"));
@@ -54,6 +63,12 @@ void registroColones(int cedula, float cantidad, string estado) {
     pstmt->executeUpdate();
 }
 
+/**
+ * Encargado de insertar los datos relacionados a la tabla de registroDolares.
+ * @param[in] cedula
+ * @param[in] cantidad
+ * @param[in] estado
+*/
 void registroDolares(int cedula, float cantidad, string estado) {
 
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO registroDolares (cedula, cantidad, estado) VALUES (?, ?, ?)"));
@@ -66,38 +81,59 @@ void registroDolares(int cedula, float cantidad, string estado) {
     pstmt->executeUpdate();
 }
 
-
+/**
+ * Transforma el case de un string a todo mayúscula.
+ * @param[in] palabra
+*/
 void toUpperCase(string& palabra) {
     transform(palabra.begin(), palabra.end(), palabra.begin(), [](unsigned char c) {return toupper(c);});
 }
 
-// Para verificar que lo ingresado son letras
+/**
+ * Para verificar que lo ingresado son letras y no números.
+ * @param[in] str
+*/
 bool validarLetras(const string& str) {
     return regex_match(str, regex("^[A-Za-z]+$"));
 }
 
-// Para verificar que lo ingresado son digitos
+/**
+ * Para verificar que lo ingresado son digitos y no letras.
+ * @param[in] str
+*/
 bool validarDigitos(const string& str) {
     return regex_match(str, regex("^[0-9]+$"));
 }
 
-// Validar float ingresado por el usuario
+/**
+ * Para verificar que lo ingresado son float y no letras.
+ * @param[in] str
+*/
 bool validarFloat(const string& str) {
     regex floatRegex(R"([0-9]*\.?[0-9]+)"); // Recuerde que por ser float siempre va a ser #.#
     return regex_match(str, floatRegex);
 }
 
-// Verificar correro
+/**
+ * Para verificar que lo ingresado cumple con los requisitos de un correo electrónico.
+ * @param[in] str
+*/
 bool validarCorreo(const string& str) {
     return regex_match(str, regex(R"(^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$)"));
 }
 
-// Convertir de string a float
+/**
+ * Para convertir de string a float
+ * @param[in] str
+*/
 float stringToFloat(const string& str) {
     return stof(str);
 }
 
-// Funcion para validar cedula, que se espera que sean ints, ademas verifica que la cedula esté en la base de datos (por esto no usar en crearUsuario)
+/**
+ * Funcion para validar la cédula ingresada por el usuario, que se espera que sean ints, ademas verifica que la
+ * cedula esté en la base de datos (por esto no usar en crearUsuario).
+*/
 int validarCedula() {
     int cedula;
     string cedulaString;
@@ -138,6 +174,12 @@ int validarCedula() {
     } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
 }
 
+/**
+ * Verifica que el saldo sea suficiente en los otros procesos, por ejemplo que el usuario no pueda retirar más de lo que tiene en la cuenta.
+ * @param[in] cedula
+ * @param[in] monto
+ * @param[in] moneda
+*/
 bool verificarSaldoSuficiente(int cedula, float monto, const string& moneda) {
     std::unique_ptr<sql::PreparedStatement> pstmt;
     if (moneda == "CRC") {
@@ -170,9 +212,13 @@ bool verificarSaldoSuficiente(int cedula, float monto, const string& moneda) {
     }
 }
 
-
-
-
+/**
+ * Verifica que se puedan hacer transferencias de forma correcta, por ejemplo que el usuario tenga la cantidad suficientes de fondos
+ * para realizar una transferencia.
+ * @param[in] cedula
+ * @param[in] cantidad
+ * @param[in] moneda
+*/
 bool verificarSaldotransferencia(int cedula, float monto, const string& moneda) {
     std::unique_ptr<sql::PreparedStatement> pstmt;
     if (moneda == "CRC") {
@@ -201,10 +247,9 @@ bool verificarSaldotransferencia(int cedula, float monto, const string& moneda) 
     }
 }
 
-
-
-
-// Funcion que le solicita al usuario el saldo y verifica que sea el formato correcto
+/**
+ * Determina si el saldo ingresado por el usuario es válido, es decir, que no ingrese letras o símbolos, solo números.
+*/
 float validarSaldo() {
     float saldo;
     string saldoString;
@@ -226,6 +271,9 @@ float validarSaldo() {
     return saldo; // Devolver float porque asi es como lo requiere la base de datos
 }
 
+/**
+ * Encargado de conectarse a la base de datos.
+*/
 void connectDB() {
     try
     {
@@ -254,6 +302,9 @@ void connectDB() {
     }
 };
 
+/**
+ * Función que crea un usuario y lo registra en la base de datos después de consultar toda la información.
+*/
 void crear_usuario() {
     //objeto usuario de tipo cliente
     //Cliente* usuario;
@@ -350,6 +401,9 @@ void crear_usuario() {
     cout << "\n Se agrego el usuario de forma exitosa .... " << endl;
 };
 
+/**
+ * Función que crea una cuenta en colones y lo registra en la base de datos después de consultar toda la información.
+*/
 void crearCuentaColones() {
     //cuentaColones cuenta;
     int cedula;
@@ -375,7 +429,9 @@ void crearCuentaColones() {
     cout << "\n";
 };
 
-
+/**
+ * Función que crea una cuenta en dólares y lo registra en la base de datos después de consultar toda la información.
+*/
 void crearCuentaDolares() {
     //cuentaDolares cuenta;
     cout << endl;
@@ -401,6 +457,11 @@ void crearCuentaDolares() {
 
 //Empezamos con las funciones de cuentas colones y dolares
 
+/**
+ * Permite que el usuario pueda realizar un depósito mediante el ingreso de la cédula y se encarga de hacer las modificaciones
+ * correspondientes en la base de datos.
+ * @param[in] moneda
+*/
 void depositar(string moneda) {
 
     int cedula;
@@ -462,6 +523,11 @@ void depositar(string moneda) {
 };
 
 //Pendiente: crear excepcion para que solo puedan ingresar monedas USD Y CRC
+/**
+ * Permite que el usuario pueda realizar un retiro mediante el ingreso de la cédula y se encarga de hacer las modificaciones
+ * correspondientes en la base de datos.
+ * @param[in] moneda
+*/
 void retirar(string moneda) {
     int cedula;
     float retiro;
@@ -518,6 +584,11 @@ void retirar(string moneda) {
     }
 };
 
+/**
+ * Permite que el usuario pueda realizar una transferencia mediante el ingreso de la cédula y se encarga de hacer las modificaciones
+ * correspondientes en la base de datos.
+ * @param[in] moneda
+*/
 void transferir(string moneda) {
     //esta es una mezcla de las funciones retirar y depositar
     int depositante;
@@ -605,31 +676,51 @@ void transferir(string moneda) {
 //las funciones de aqui hacia arriba todas funcionan correctamente :)
 
 //funciones para los prestamos
-//funciones para los prestamos
 
+/**
+ * Calcula el interés simple a la hora de sacar un préstamo.
+ * @param[in] cantidadInicial
+ * @param[in] years
+ * @param[in] interesAnual
+ * @param[out] interes
+*/
 float calcularInteresSimple(float cantidadInicial, int years, float interesAnual) {
-
     float interes = cantidadInicial * years * interesAnual;
     return interes;
 }
 
+/**
+ * Calcula el interés compuesto a la hora de sacar un préstamo.
+ * @param[in] cantidadInicial
+ * @param[in] years
+ * @param[in] interesAnual
+ * @param[in] capitalizacion
+ * @param[out] interes
+*/
 float calcularInteresCompuesto(float cantidadInicial, int years, float interesAnual, float capitalizacion = 1) {
     float interes = cantidadInicial * pow(1 + interesAnual / capitalizacion, years * capitalizacion);
     return interes;
 }
 
-//*******************************************
-//revisar estas formulas
-//*******************************************
-
-
+/**
+ * Encargado de calcular las cuotas a pagar por sacar un préstamo.
+ * @param[in] cantidadInicial
+ * @param[in] interesAnual
+ * @param[in] periodos
+ * @param[out] resultado
+*/
 float cuota(float cantidadInicial, float interesAnual, int periodos) {
     float interesMensual = interesAnual / 12;
     float resultado = (cantidadInicial * (interesMensual * (pow(1 + interesMensual, periodos)))) / (pow(1 + interesMensual, periodos) - 1);
     return resultado;
 }
 
-
+/**
+ * Realiza consultas de la cuota del préstamo en colones.
+ * @param[in] cedula
+ * @param[in] tipo
+ * @param[out] couta
+*/
 float obtenerCuotaColones(int cedula, string tipo) {
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Colones WHERE cedula=? AND tipo=?"));
 
@@ -652,14 +743,15 @@ float obtenerCuotaColones(int cedula, string tipo) {
         std::cout << "No se encontraron registros que coincidan con los criterios especificados." << std::endl;
     }
     return cuota;
-
     //ahi obtuvimos la cuota en colones
-
-
-
-
 }
 
+/**
+ * Realiza consultas de la cuota del préstamo en dólares.
+ * @param[in] cedula
+ * @param[in] tipo
+ * @param[out] couta
+*/
 float obtenerCuotaDolares(int cedula, string tipo) {
 
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Dolares WHERE cedula=? AND tipo=?"));
@@ -683,14 +775,16 @@ float obtenerCuotaDolares(int cedula, string tipo) {
         std::cout << "No se encontraron registros que coincidan con los criterios especificados." << std::endl;
     }
     return cuota;
-
 }
-
-
-
 
 //crear un prestamo
 //segun lo de arriba creemos que ya es suficiente para saber que prestamos iremos a sacar
+/**
+ * Permite el usuario sacar un préstamo, para ello se le solicita le cédula y después se hacen los cálculos correspondientes
+ * y se guarda en la base de datos.
+ * @param[in] moneda
+ * @param[in] tipo
+*/
 void sacarPrestamo(string moneda, string tipo) {
     cout << endl;
     cout << endl;
@@ -816,6 +910,12 @@ void sacarPrestamo(string moneda, string tipo) {
 //en las funciones de pagar prestamo , pueden ser pagarlos en efectivo o pagarlos con su propia cuenta 
 //hay que tomar en cuenta esto
 //Ademas manejo de excepciones por aca si el usuario no tiene mas fondos para poder pagarlos
+
+/**
+ * Permite el usuario pueda hacer un pago del préstamo en colones, para ello se le solicita le cédula y después se hacen los cálculos correspondientes
+ * y se guarda en la base de datos.
+ * @param[in] tipo
+*/
 void pagarPrestamoColones(string tipo) {
     cout << endl;
     cout << endl;
@@ -893,6 +993,11 @@ void pagarPrestamoColones(string tipo) {
 
 }
 
+/**
+ * Permite el usuario pueda hacer un pago del préstamo en dolares, para ello se le solicita le cédula y después se hacen los cálculos correspondientes
+ * y se guarda en la base de datos.
+ * @param[in] tipo
+*/
 void pagarPrestamoDolares(string tipo) {
     cout << endl;
     cout << endl;
@@ -970,9 +1075,11 @@ void pagarPrestamoDolares(string tipo) {
 
 }
 
-//genera un informe del estado del prestamo
-//literal es un read en la base de datos
-//solo ocupamos el nombre
+/**
+ * Genera un informe de las transacciones que ha tenido el usuario basado en la cédula ingresada
+ * y también la moneda (ya que puede tener cuenta en colones o dólares)
+ * @param[in] moneda
+*/
 void generarInforme(string moneda) {
     cout << endl;
     cout << endl;
@@ -1062,6 +1169,11 @@ void generarInforme(string moneda) {
     }
 }
 
+/**
+ * Genera un informe de los préstamos del cliente (puede ser PRENDARIO, HIPOTECARIO o PERSONAL) basado en la cédula ingresada y también
+ * la moneda (ya que puede tener cuenta en colones o dólares)
+ * @param[in] tipo
+*/
 void generarInformePrestamo(string tipo) {
     cout << endl;
     cout << endl;
@@ -1172,6 +1284,10 @@ void generarInformePrestamo(string tipo) {
     }
 }
 
+/**
+ * Calcula la fecha actual, esto para las transacciones en la base de datos
+ * @param[out] now_tm
+*/
 tm calcularFechaActual() {
     auto now = chrono::system_clock::now();
     time_t now_time = chrono::system_clock::to_time_t(now);
@@ -1183,6 +1299,11 @@ tm calcularFechaActual() {
     return now_tm;
 }
 
+/**
+ * Calcula la fecha final, después de cierta cantidad de tiempo, esto para las fechas de finalización
+ * del CDP
+ * @param[out] fechaFinal
+*/
 tm calcularFechaFinal(tm fechaInicio, int months) {
     tm fechaFinal = fechaInicio;
     fechaFinal.tm_mon += months;
@@ -1190,13 +1311,19 @@ tm calcularFechaFinal(tm fechaInicio, int months) {
     return fechaFinal;
 }
 
+/**
+ * Pasar la fechas de tm a string
+*/
 string formatearFecha(tm fecha) {
     ostringstream oss;
     oss << put_time(&fecha, "%Y-%m-%d");
     return oss.str();
 }
 
-// Funcion para manejar el CDP
+/**
+ * Hace los cálculos correspondientes para asignarle al usuario un CDP cuando lo solicita, para ello debe ingresar
+ * su cédula y guarda los resultados de la transacción en la base de datos.
+*/
 void certificadoDP() {
     int cedula;
     int meses;
