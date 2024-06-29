@@ -31,7 +31,10 @@
 using namespace std;
 using namespace sql;
 
+//modulacion funciones
 
+bool verificar_un_prestamo(string tipo, int cedula, string moneda);
+bool verificar_un_cuenta(int cedula, string moneda);
 
 // create a standard objects for sql tables :)
 //estructura general de un cliente, para su creacion en la base de datos
@@ -278,7 +281,7 @@ void connectDB() {
     try
     {
         driver = sql::mysql::get_mysql_driver_instance();
-        con = driver->connect("tcp://127.0.0.1:3306", "root", "Holis123#");
+        con = driver->connect("tcp://127.0.0.1:3306", "root", "123.Chris001");
         // seleccionamos nuestra base de datos
         con->setSchema("banco_data_base_4");
 
@@ -408,25 +411,45 @@ void crearCuentaColones() {
     //cuentaColones cuenta;
     int cedula;
     float saldo;
+    bool verificacion;
     cout << endl;
     cout << endl;
     cout << "*********************************" << endl;
     cout << "*****Creando Cuenta Colones******" << endl;
     cout << "*********************************" << endl;
 
+    //cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+
+    //cout << "Por favor ingresa la cedula: ";
+    //cin >> cedula;
+
+    //saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
+    //cout << "\n Por favor ingresa el saldo inicial a depositar en colones: ";
+    //cin >> saldo;
     cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
     saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
 
-    //llamada a bases de datos INSERT
-    std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaColones (cedula, saldo) VALUES (?, ?)"));
-    pstmt->setInt(1, cedula); // Cédula del cliente
-    pstmt->setDouble(2, saldo); // Saldo inicial
+    verificacion = verificar_un_cuenta(cedula, "CRC");
+    cout << "la salida es: " << verificacion << endl;
 
-    // Ejecuta la declaración
-    pstmt->executeUpdate();
-    //se ejecuta el query ...
-    cout << "Se agrego la cuenta de colones forma exitosa .... " << endl;
-    cout << "\n";
+    //llamada a bases de datos INSERT
+    if (!verificacion) {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaColones (cedula, saldo) VALUES (?, ?)"));
+        pstmt->setInt(1, cedula); // Cédula del cliente
+        pstmt->setDouble(2, saldo); // Saldo inicial
+
+        // Ejecuta la declaración
+        pstmt->executeUpdate();
+        //se ejecuta el query ...
+        cout << "Se agrego la cuenta de colones forma exitosa .... " << endl;
+        cout << "\n";
+    }
+    else
+    {
+        cout << endl << endl;
+        cout << "El cliente ya tiene  una cuenta de colones activa ...." << endl << endl;
+    }
+
 };
 
 /**
@@ -441,18 +464,31 @@ void crearCuentaDolares() {
     cout << "*********************************" << endl;
     int cedula;
     float saldo;
-
+    bool verificacion;
+    //cout << "Por favor ingresa la cedula: ";
+    //cin >> cedula;
     cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
     saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
-
+    //cout << "\n Por favor ingresa el saldo inicial a depositar en colones: ";
+    //cin >> saldo;
+    verificacion = verificar_un_cuenta(cedula, "USD");
+    cout << "la salida es: " << verificacion << endl;
     //lamada a bases de datos INSERT
-    std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaDolares (cedula, saldo) VALUES (?, ?)"));
-    pstmt->setInt(1, cedula); // Cédula del cliente
-    pstmt->setDouble(2, saldo); // Saldo inicial
+    if (verificacion == false) {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaDolares (cedula, saldo) VALUES (?, ?)"));
+        pstmt->setInt(1, cedula); // Cédula del cliente
+        pstmt->setDouble(2, saldo); // Saldo inicial
 
-    // Ejecuta la declaración
-    pstmt->executeUpdate();
-    cout << "Se agrego la cuenta de dolares de  forma exitosa .... " << endl;
+        // Ejecuta la declaración
+        pstmt->executeUpdate();
+        cout << "Se agrego la cuenta de dolares de  forma exitosa .... " << endl;
+    }
+    else
+    {
+        cout << endl << endl;
+        cout << "El cliente ya tiene  una cuenta de dolares activa ...." << endl << endl;
+    }
+
 };
 
 //Empezamos con las funciones de cuentas colones y dolares
@@ -800,108 +836,126 @@ void sacarPrestamo(string moneda, string tipo) {
     float saldoPendiente;// saldo que sigue debiendo la persona
     int cuotasRestantes;//cuota que debe aun por pagar
     float tasaInteresAnual; //tasa de interes por sacar el prestamo
+    bool verificacion;
     //Ademas una columna con el tipo de prestamo
     //creo que lo mejor seria manejar los prestamos en dos tablas colones y dolares
 
     //cout << "\nEn que moneda desea solicitar el prestamo: ";
     //cin >> moneda;
+
     cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
-    cout << "\nPor favor ingresa la cantidad de dinero del prestamo: ";
-    cin >> cantidad;
-    cout << "\nPor favor ingresa los meses a los cuales sera el prestamo: ";
-    cin >> periodos;
-    cout << "\nPor favor ingresa la tasa interes anual del prestamo: ";
-    cin >> tasaInteresAnual;
+    //cout << "Por favor ingresa la cedula: ";
+    //cin >> cedula;
+    //---------------------------------------------
+    //VERIFICACION
+    //---------------------------------------------
+
+    verificacion = verificar_un_prestamo(tipo, cedula, moneda);
+    if (verificacion == false) {
+        cout << "\nPor favor ingresa la cantidad de dinero del prestamo: ";
+        cin >> cantidad;
+        cout << "\nPor favor ingresa los meses a los cuales sera el prestamo: ";
+        cin >> periodos;
+        cout << "\nPor favor ingresa la tasa interes anual del prestamo: ";
+        cin >> tasaInteresAnual;
 
 
-    tasaInteresAnual = tasaInteresAnual / 100; // para dejarla en terminos de 0 .. 1
+        tasaInteresAnual = tasaInteresAnual / 100; // para dejarla en terminos de 0 .. 1
 
-    //sacaremos la cuota
+        //sacaremos la cuota
 
-    Cuota = cuota(cantidad, tasaInteresAnual, periodos);//ya calculamos la cuota que tienen que pagar con interes fijo
+        Cuota = cuota(cantidad, tasaInteresAnual, periodos);//ya calculamos la cuota que tienen que pagar con interes fijo
 
-    //insertaremos dichos datos a la base de datos
-
-
-    //insertamos en tabla de prestamos de colones
-    if (moneda == "CRC")
-    {
-        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Colones(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
-
-        //ingresamos los datos
-        pstmt->setInt(1, cedula); // Ejemplo de cédula
-        pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
-        pstmt->setInt(3, periodos); // Ejemplo de periodos
-        pstmt->setDouble(4, Cuota); // Ejemplo de cuota
-        pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
-        pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
-        pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interés anual
-        pstmt->setString(8, "CRC"); // Ejemplo de moneda
-        pstmt->setString(9, tipo); //tipo de prestamo
-        //actualizamos la tabla
-        pstmt->executeUpdate();
-
-        //nos falta agregar esa cantidad de plata a nuestras cuentas ojo
-
-        // Prepara una declaración para actualizar el saldo
-        std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo + ? WHERE cedula = ?"));
-
-        // Establece los valores de los parámetros
-        pstmt2->setDouble(1, cantidad); // Nuevo saldo
-        pstmt2->setInt(2, cedula); // Cédula del cliente
-        pstmt2->executeUpdate();
-
-        //registramos la transaccion
-
-        registroColones(cedula, cantidad, "Deposito_Prestamo");
-
-        cout << "\n" << endl;
-        cout << endl;
-        cout << endl;
-        cout << "******************************" << endl;
-        cout << "Prestamo Aprobado con Exito..." << endl;
-        cout << "******************************" << endl;
+        //insertaremos dichos datos a la base de datos
 
 
+        //insertamos en tabla de prestamos de colones
+        if (moneda == "CRC")
+        {
+            std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Colones(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
+
+            //ingresamos los datos
+            pstmt->setInt(1, cedula); // Ejemplo de cédula
+            pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
+            pstmt->setInt(3, periodos); // Ejemplo de periodos
+            pstmt->setDouble(4, Cuota); // Ejemplo de cuota
+            pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
+            pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
+            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interés anual
+            pstmt->setString(8, "CRC"); // Ejemplo de moneda
+            pstmt->setString(9, tipo); //tipo de prestamo
+            //actualizamos la tabla
+            pstmt->executeUpdate();
+
+            //nos falta agregar esa cantidad de plata a nuestras cuentas ojo
+
+            // Prepara una declaración para actualizar el saldo
+            std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo + ? WHERE cedula = ?"));
+
+            // Establece los valores de los parámetros
+            pstmt2->setDouble(1, cantidad); // Nuevo saldo
+            pstmt2->setInt(2, cedula); // Cédula del cliente
+            pstmt2->executeUpdate();
+
+            //registramos la transaccion
+
+            registroColones(cedula, cantidad, "Deposito_Prestamo");
+
+            cout << "\n" << endl;
+            cout << endl;
+            cout << endl;
+            cout << "******************************" << endl;
+            cout << "Prestamo Aprobado con Exito..." << endl;
+            cout << "******************************" << endl;
+
+
+        }
+        //insertamos en tabla de prestamos de dolares
+        else
+        {
+            std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Dolares(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
+
+            //ingresamos los datos
+            pstmt->setInt(1, cedula); // Ejemplo de cédula
+            pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
+            pstmt->setInt(3, periodos); // Ejemplo de periodos
+            pstmt->setDouble(4, Cuota); // Ejemplo de cuota
+            pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
+            pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
+            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interés anual
+            pstmt->setString(8, "USD"); // Ejemplo de moneda
+            pstmt->setString(9, tipo); //tipo de prestamo
+            //actualizamos la tabla
+            pstmt->executeUpdate();
+
+
+
+
+            // Prepara una declaración para actualizar el saldo
+            std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo + ? WHERE cedula = ?"));
+
+            // Establece los valores de los parámetros
+            pstmt2->setDouble(1, cantidad); // Nuevo saldo
+            pstmt2->setInt(2, cedula); // Cédula del cliente
+            pstmt2->executeUpdate();
+
+            //registramos la transaccion
+
+            registroDolares(cedula, cantidad, "Deposito_Prestamo");
+            cout << endl;
+            cout << endl;
+            cout << "******************************" << endl;
+            cout << "Prestamo Aprobado con Exito..." << endl;
+            cout << "******************************" << endl;
+        }
     }
-    //insertamos en tabla de prestamos de dolares
     else
     {
-        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Dolares(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
-
-        //ingresamos los datos
-        pstmt->setInt(1, cedula); // Ejemplo de cédula
-        pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
-        pstmt->setInt(3, periodos); // Ejemplo de periodos
-        pstmt->setDouble(4, Cuota); // Ejemplo de cuota
-        pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
-        pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
-        pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interés anual
-        pstmt->setString(8, "USD"); // Ejemplo de moneda
-        pstmt->setString(9, tipo); //tipo de prestamo
-        //actualizamos la tabla
-        pstmt->executeUpdate();
-
-
-
-
-        // Prepara una declaración para actualizar el saldo
-        std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo + ? WHERE cedula = ?"));
-
-        // Establece los valores de los parámetros
-        pstmt2->setDouble(1, cantidad); // Nuevo saldo
-        pstmt2->setInt(2, cedula); // Cédula del cliente
-        pstmt2->executeUpdate();
-
-        //registramos la transaccion
-
-        registroDolares(cedula, cantidad, "Deposito_Prestamo");
-        cout << endl;
-        cout << endl;
-        cout << "******************************" << endl;
-        cout << "Prestamo Aprobado con Exito..." << endl;
-        cout << "******************************" << endl;
+        cout << "-----------------------------------------------------------------------------------------------------------------------" << endl;
+        cout << "El cliente  ya tiene un prestamo activoo del que esta solicitando , solo es posible 1 tipo de prestamo por cliente....." << endl << endl;
+        cout << "-----------------------------------------------------------------------------------------------------------------------" << endl;
     }
+
 
 
     //hasta aqui ya hemos ingresado los datos de las tablas para pedir un prestamo   
@@ -1423,6 +1477,80 @@ void certificadoDP() {
     pstmt->executeUpdate();
 }
 
+
+bool verificar_un_prestamo(string tipo, int cedula, string moneda) {
+    //ejemplo
+    if (moneda == "CRC" || moneda == "crc") {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Colones WHERE cedula=? AND tipo=?"));
+        pstmt->setInt(1, cedula); // Cédula específica
+        pstmt->setString(2, tipo); // Tipo específico
+
+        // Ejecutar la consulta
+        res = pstmt->executeQuery();
+    }
+    else {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Dolares WHERE cedula=? AND tipo=?"));
+        pstmt->setInt(1, cedula); // Cédula específica
+        pstmt->setString(2, tipo); // Tipo específico
+
+        // Ejecutar la consulta
+        res = pstmt->executeQuery();
+    }
+
+
+    //ahi obtenemos la respuesta
+
+    float cuota;
+    bool salida;
+
+    // Verificar si se obtuvo un resultado
+    if (res->next()) {
+
+        salida = true;
+    }
+    else {
+        salida = false;
+    }
+    //retorna 0 si es false
+    //retorna 1 si es true
+    return salida;
+}
+
+bool verificar_un_cuenta(int cedula, string moneda) {
+    //ejemplo
+    if (moneda == "CRC" || moneda == "crc") {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT saldo FROM cuentaColones WHERE cedula=?"));
+        pstmt->setInt(1, cedula); // Cédula específica
+
+        // Ejecutar la consulta
+        res = pstmt->executeQuery();
+    }
+    else {
+        std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT saldo FROM cuentaDolares WHERE cedula=?"));
+        pstmt->setInt(1, cedula); // Cédula específica
+
+        // Ejecutar la consulta
+        res = pstmt->executeQuery();
+    }
+
+
+    //ahi obtenemos la respuesta
+
+
+    bool salida;
+
+    // Verificar si se obtuvo un resultado
+    if (res->next()) {
+
+        salida = true;// se obtuvo un resultado
+    }
+    else {
+        salida = false;
+    }
+    //retorna 0 si es false
+    //retorna 1 si es true
+    return salida;
+}
 
 
 
