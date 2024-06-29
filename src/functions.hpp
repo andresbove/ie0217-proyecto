@@ -1477,7 +1477,13 @@ void certificadoDP() {
     pstmt->executeUpdate();
 }
 
-
+/**
+ * Verifica si un préstamo existe o no.
+ * @param[in] tipo
+ * @param[in] cedula
+ * @param[in] moneda
+ * @param[out] salida
+*/
 bool verificar_un_prestamo(string tipo, int cedula, string moneda) {
     //ejemplo
     if (moneda == "CRC" || moneda == "crc") {
@@ -1516,6 +1522,13 @@ bool verificar_un_prestamo(string tipo, int cedula, string moneda) {
     return salida;
 }
 
+/**
+ * Verifica si una cuenta existe o no.
+ * @param[in] tipo
+ * @param[in] cedula
+ * @param[in] moneda
+ * @param[out] salida
+*/
 bool verificar_un_cuenta(int cedula, string moneda) {
     //ejemplo
     if (moneda == "CRC" || moneda == "crc") {
