@@ -128,7 +128,10 @@ int validarNumero() {
     } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
 }
 
-
+/**
+ * Función que valida la cédula del usuario.
+ * @param[out] numero
+*/
 int validarCedulaUsuario() {
     int numero;
     string cantidadCuotasString;
