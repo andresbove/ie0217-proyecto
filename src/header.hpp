@@ -81,6 +81,9 @@ string formatearFecha(tm fecha);
 void certificadoDP();
 bool verificar_un_prestamo(string tipo, int cedula, string moneda);
 bool verificar_un_cuenta(int cedula, string moneda);
+void convertir_crc_to_usd_pago(float cuota, int cedula, int cantidad);
+void convertir_usd_to_crc_pago(float cuota, int cedula, int cantidad);
+int validarNumero();
 //Fin de Declaracion funciones
 
 

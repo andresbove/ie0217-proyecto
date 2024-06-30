@@ -5,6 +5,7 @@
  * cedula esté en la base de datos (por esto no usar en crearUsuario).
 */
 
+
 void toUpperCase(string& palabra) {
     transform(palabra.begin(), palabra.end(), palabra.begin(), [](unsigned char c) {return toupper(c);});
 }
@@ -34,6 +35,7 @@ bool validarCorreo(const string& str) {
 float stringToFloat(const string& str) {
     return stof(str);
 }
+
 
 int validarCedula() {
     int cedula;
@@ -71,6 +73,30 @@ int validarCedula() {
             cerr << "Error al verificar la cedula en la base de datos: \n" << e.what() << endl;
             return -1;
         }
+
+    } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
+}
+
+int validarNumero() {
+    int numero;
+    string cantidadCuotasString;
+
+    do {
+        cout << "cuantas cuotas deseas pagar: ";
+        cin >> cantidadCuotasString;
+        cout << endl;
+        // Validar si input es valido
+        if (!validarDigitos(cantidadCuotasString)) {
+            cout << "Solo debe de contener nuemros.\n" << endl;
+            continue;
+        }
+
+        // Convertir string a int
+        numero = stoi(cantidadCuotasString);
+        return numero;
+        
+
+
 
     } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
 }
@@ -224,7 +250,7 @@ void connectDB() {
     try
     {
         driver = sql::mysql::get_mysql_driver_instance();
-        con = driver->connect("tcp://127.0.0.1:3306", "root", "Holis123#");
+        con = driver->connect("tcp://127.0.0.1:3306", "root", "123.Chris001");
         // seleccionamos nuestra base de datos
         con->setSchema("banco_data_base_4");
 
@@ -904,4 +930,60 @@ bool verificar_un_cuenta(int cedula, string moneda) {
     //retorna 0 si es false
     //retorna 1 si es true
     return salida;
+}
+
+//por ejemplo pagar un prestamo en dolares con colones
+void convertir_usd_to_crc_pago(float cuota, int cedula, int cantidad) {
+    //tenemos que hacer primero la conversion y luego el rebajo de la cuenta en dolares
+    //ademas tenemos que bajarle una cuota al del prestamo
+
+    float conversion = cantidad * cuota * 538; //obtenemos los colones totales a pagar
+
+    //rebajo de la cuenta de colones
+
+    if (!verificarSaldoSuficiente(cedula, conversion, "CRC")) {
+        return; // Salir de la función si el saldo no es suficiente
+    }
+
+    //llamada a la base de datos
+    //sera un update
+    
+    // Prepara una declaración para actualizar el saldo
+    std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo - ? WHERE cedula = ?"));
+
+    // Establece los valores de los parámetros
+    pstmt->setDouble(1, conversion); // Nuevo saldo
+    pstmt->setInt(2, cedula); // Cédula del cliente
+    pstmt->executeUpdate();
+    cout << endl;
+    //cout << "Se retiro el dinero  de forma exitosa.... " << endl;
+    registroColones(cedula, conversion, "PAGO_PRESTAMO");
+}
+
+//por ejemplo pagar un prestamo en colones con dolares
+void convertir_crc_to_usd_pago(float cuota, int cedula, int cantidad) {
+    //tenemos que hacer primero la conversion y luego el rebajo de la cuenta en dolares
+    //ademas tenemos que bajarle una cuota al del prestamo
+
+    float conversion = cantidad * cuota / 538; //obtenemos los dolares totales a pagar
+
+    //rebajo de la cuenta de dolares
+
+    if (!verificarSaldoSuficiente(cedula, conversion, "USD")) {
+        return; // Salir de la función si el saldo no es suficiente
+    }
+
+    //llamada a la base de datos
+    //sera un update
+
+    // Prepara una declaración para actualizar el saldo
+    std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo - ? WHERE cedula = ?"));
+
+    // Establece los valores de los parámetros
+    pstmt->setDouble(1, conversion); // Nuevo saldo
+    pstmt->setInt(2, cedula); // Cédula del cliente
+    pstmt->executeUpdate();
+    cout << endl;
+    //cout << "Se retiro el dinero  de forma exitosa.... " << endl;
+    registroDolares(cedula, conversion, "PAGO_PRESTAMO");
 }

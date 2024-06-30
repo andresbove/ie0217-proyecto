@@ -7,10 +7,10 @@
 #include <iostream>
 #include <stdexcept>
 #include <limits>
-#include "FuncionesMenu.hpp"
-#include "ExpresionesRegulares.hpp"
-#include "FuncionesGenerales.hpp"
-#include "FuncionesPrestamos.hpp"
+#include "FuncionesMenu.cpp"
+#include "header.hpp"
+#include "FuncionesGenerales.cpp"
+#include "FuncionesPrestamos.cpp"
 
 
 int main() {
