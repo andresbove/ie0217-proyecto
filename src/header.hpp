@@ -33,6 +33,46 @@ using namespace std;
 using namespace sql;
 
 
+//structs
+
+
+struct Cliente {
+    int cedula; // Cédula debe ser única y no nula
+    string nombre; // Nombre con un máximo de 50 caracteres
+    string apellido1; // Primer apellido con un máximo de 50 caracteres
+    string apellido2; // Segundo apellido con un máximo de 50 caracteres
+    string provincia; // Provincia con un máximo de 50 caracteres
+    string telefono; // Teléfono con un máximo de 20 caracteres
+    string correo; // Correo con un máximo de 50 caracteres
+};
+
+struct Prestamo {
+    int cedula; // Cédula del cliente
+    float cantidad; // Cantidad del préstamo
+    int periodos; // Número de periodos de pago
+    float cuota; // Monto de la cuota de pago
+    float saldoPendiente; // Saldo pendiente del préstamo
+    int cuotasRestantes; // Número de cuotas restantes
+    float interesAnual; // Tasa de interés anual
+    string moneda; // Moneda, con un máximo de 10 caracteres
+    string tipo; // Tipo de préstamo, con un máximo de 20 caracteres
+};
+
+struct CuentaCliente {
+    int cedula; // Cédula del cliente, usada como clave foránea
+    float saldo; // Saldo de la cuenta del cliente
+};
+
+struct Inversion {
+    int cedula; // Cédula del cliente, usada como clave foránea
+    double monto; // Monto de la inversión, DECIMAL(10, 2)
+    string moneda; // Moneda, con un máximo de 10 caracteres
+    double tasaInteres; // Tasa de interés, DECIMAL(5, 2)
+    int meses; // Duración de la inversión en meses
+    string fecha_inicio; // Fecha de inicio de la inversión
+    string fecha_vencimiento; // Fecha de vencimiento de la inversión
+};
+
 //Inicio de Declaracion funciones
 void menuPrincipal();
 void menuAtencionCliente();
@@ -84,6 +124,7 @@ bool verificar_un_cuenta(int cedula, string moneda);
 void convertir_crc_to_usd_pago(float cuota, int cedula, int cantidad);
 void convertir_usd_to_crc_pago(float cuota, int cedula, int cantidad);
 int validarNumero();
+int validarCedulaUsuario();
 //Fin de Declaracion funciones
 
 
