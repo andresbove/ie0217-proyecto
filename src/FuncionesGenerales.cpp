@@ -114,7 +114,7 @@ int validarNumero() {
         cout << endl;
         // Validar si input es valido
         if (!validarDigitos(cantidadCuotasString)) {
-            cout << "Solo debe de contener nuemros.\n" << endl;
+            cout << "Solo debe de contener numeros.\n" << endl;
             continue;
         }
 
@@ -122,6 +122,31 @@ int validarNumero() {
         numero = stoi(cantidadCuotasString);
         return numero;
         
+
+
+
+    } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
+}
+
+
+int validarCedulaUsuario() {
+    int numero;
+    string cantidadCuotasString;
+
+    do {
+        cout << "Por favor digite la cedula del cliente: ";
+        cin >> cantidadCuotasString;
+        cout << endl;
+        // Validar si input es valido
+        if (!validarDigitos(cantidadCuotasString)) {
+            cout << "Solo debe de contener numeros.\n" << endl;
+            continue;
+        }
+
+        // Convertir string a int
+        numero = stoi(cantidadCuotasString);
+        return numero;
+
 
 
 
@@ -312,15 +337,8 @@ void connectDB() {
 */
 void crear_usuario() {
     //objeto usuario de tipo cliente
-    //Cliente* usuario;
     //ocupamos variables locales para luego almacenar con setter
-    string nombre;
-    string cedula;
-    string apellido1;
-    string apellido2;
-    string Provincia;
-    string telefono;
-    string correo;
+    Cliente cliente;
     cout << endl;
     cout << endl;
 
@@ -329,77 +347,72 @@ void crear_usuario() {
     cout << "***************************" << endl;
 
     // Validar cedula (solo digitos)
-    do {
-        cout << "\n Por favor ingresa el cedula: ";
-        cin >> cedula;
-        if (!validarDigitos(cedula)) {
-            cout << "La cedula debe contener solo números." << endl;
-        }
-    } while (!validarDigitos(cedula)); // Siempre y cuando el regex devuelva False
-
+    // Validar cedula (solo digitos)
+    
+    cliente.cedula = validarCedulaUsuario();
     // Validar nombre (solo letras)
     do {
         cout << "Por favor ingresa el nombre: ";
-        cin >> nombre;
-        if (!validarLetras(nombre)) {
+        cin >> cliente.nombre;
+        if (!validarLetras(cliente.nombre)) {
             cout << "El nombre solo debe contener letras." << endl;
         }
-    } while (!validarLetras(nombre));
+    } while (!validarLetras(cliente.nombre));
 
     // Validar apellido1 (solo letras)
     do {
         cout << "\n Por favor ingresa el primer apellido: ";
-        cin >> apellido1;
-        if (!validarLetras(apellido1)) {
+        cin >> cliente.apellido1;
+        if (!validarLetras(cliente.apellido1)) {
             cout << "El primer apellido solo debe contener letras." << endl;
         }
-    } while (!validarLetras(apellido1));
+    } while (!validarLetras(cliente.apellido1));
 
     // Validar apellido2 (solo letras)
     do {
         cout << "\n Por favor ingresa el segundo apellido: ";
-        cin >> apellido2;
-        if (!validarLetras(apellido2)) {
+        cin >> cliente.apellido2;
+        if (!validarLetras(cliente.apellido2)) {
             cout << "El segundo apellido solo debe contener letras." << endl;
         }
-    } while (!validarLetras(apellido2));
+    } while (!validarLetras(cliente.apellido2));
 
     // Validar provincia (solo letras)
     do {
         cout << "\n Por favor ingresa la provincia: ";
-        cin >> Provincia;
-        if (!validarLetras(Provincia)) {
+        cin >> cliente.provincia;
+        if (!validarLetras(cliente.provincia)) {
             cout << "La provincia solo debe contener letras." << endl;
         }
-    } while (!validarLetras(Provincia));
+    } while (!validarLetras(cliente.provincia));
 
     // Validar telefono (solo digitos)
     do {
         cout << "\n Por favor ingresa el telefono: ";
-        cin >> telefono;
-        if (!validarDigitos(telefono)) {
+        cin >> cliente.telefono;
+        if (!validarDigitos(cliente.telefono)) {
             cout << "El telefono solo debe contener numeros." << endl;
         }
-    } while (!validarDigitos(telefono));
+    } while (!validarDigitos(cliente.telefono));
 
     // Validar correo (caso especial)
     do {
         cout << "\n Por favor ingresa el correo: ";
-        cin >> correo;
-        if (!validarCorreo(correo)) {
+        cin >> cliente.correo;
+        if (!validarCorreo(cliente.correo)) {
             cout << "El correo solo debe seguir el patron (letras o numeros)@(letras).com." << endl;
         }
-    } while (!validarCorreo(correo));
+    } while (!validarCorreo(cliente.correo));
 
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO Cliente (cedula, nombre, apellido1, apellido2, provincia, telefono, correo) VALUES (?,?, ?, ?, ?, ?, ?)"));
     // Establece los valores de los parámetros
-    pstmt->setString(1, cedula);
-    pstmt->setString(2, nombre);
-    pstmt->setString(3, apellido1);
-    pstmt->setString(4, apellido2);
-    pstmt->setString(5, Provincia);
-    pstmt->setString(6, telefono);
-    pstmt->setString(7, correo);
+    pstmt->setInt(1, cliente.cedula);
+    pstmt->setString(2, cliente.nombre);
+    pstmt->setString(3, cliente.apellido1);
+    pstmt->setString(4, cliente.apellido2);
+    pstmt->setString(5, cliente.provincia);
+    pstmt->setString(6, cliente.telefono);
+    pstmt->setString(7, cliente.correo);
 
     pstmt->executeUpdate();
     cout << endl;
@@ -412,9 +425,8 @@ void crear_usuario() {
  * Función que crea una cuenta en colones y lo registra en la base de datos después de consultar toda la información.
 */
 void crearCuentaColones() {
-    //cuentaColones cuenta;
-    int cedula;
-    float saldo;
+
+    CuentaCliente cuenta;
     bool verificacion;
     cout << endl;
     cout << endl;
@@ -422,25 +434,18 @@ void crearCuentaColones() {
     cout << "*****Creando Cuenta Colones******" << endl;
     cout << "*********************************" << endl;
 
-    //cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
 
-    //cout << "Por favor ingresa la cedula: ";
-    //cin >> cedula;
+    cuenta.cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+    cuenta.saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
 
-    //saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
-    //cout << "\n Por favor ingresa el saldo inicial a depositar en colones: ";
-    //cin >> saldo;
-    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
-    saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
+    verificacion = verificar_un_cuenta(cuenta.cedula, "CRC");
 
-    verificacion = verificar_un_cuenta(cedula, "CRC");
-    cout << "la salida es: " << verificacion << endl;
 
     //llamada a bases de datos INSERT
     if (!verificacion) {
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaColones (cedula, saldo) VALUES (?, ?)"));
-        pstmt->setInt(1, cedula); // Cédula del cliente
-        pstmt->setDouble(2, saldo); // Saldo inicial
+        pstmt->setInt(1, cuenta.cedula); // Cédula del cliente
+        pstmt->setDouble(2, cuenta.saldo); // Saldo inicial
 
         // Ejecuta la declaración
         pstmt->executeUpdate();
@@ -468,22 +473,19 @@ void crearCuentaDolares() {
     cout << "*********************************" << endl;
     cout << "*****Creando Cuenta Dolares******" << endl;
     cout << "*********************************" << endl;
-    int cedula;
-    float saldo;
+    CuentaCliente cuenta;
     bool verificacion;
-    //cout << "Por favor ingresa la cedula: ";
-    //cin >> cedula;
-    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
-    saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
-    //cout << "\n Por favor ingresa el saldo inicial a depositar en colones: ";
-    //cin >> saldo;
-    verificacion = verificar_un_cuenta(cedula, "USD");
-    cout << "la salida es: " << verificacion << endl;
+
+    cuenta.cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+    cuenta.saldo = validarSaldo(); // Solicitar el saldo y verificar que el input sea correcto
+
+    verificacion = verificar_un_cuenta(cuenta.cedula, "USD");
+
     //lamada a bases de datos INSERT
     if (verificacion == false) {
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO cuentaDolares (cedula, saldo) VALUES (?, ?)"));
-        pstmt->setInt(1, cedula); // Cédula del cliente
-        pstmt->setDouble(2, saldo); // Saldo inicial
+        pstmt->setInt(1, cuenta.cedula); // Cédula del cliente
+        pstmt->setDouble(2, cuenta.saldo); // Saldo inicial
 
         // Ejecuta la declaración
         pstmt->executeUpdate();
@@ -522,8 +524,6 @@ void depositar(string moneda) {
 
     cout << "\n Por favor ingresa la cantidad a depositar: ";
     cin >> deposito;
-    //cout << "\n Por favor ingresa la moneda: ";
-    //cin >> moneda;
 
 
     //llamada a la base de datos
@@ -648,16 +648,14 @@ void transferir(string moneda) {
     cout << "*********Transfiriendo*************" << endl;
     cout << "*********************************" << endl;
 
-    //cout << "Por favor ingresa la cedula depositante: ";
-    //cin >> depositante;
+
     cout << "\n(Datos de depositante) ";
     depositante = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
 
     cout << "\nPor favor ingresa la cantidad a transferir: ";
     cin >> cantidad;
 
-    //cout << "\n Por favor ingresa la cedula del destinatario: ";
-    //cin >> destinatario;
+
     cout << "\n(Datos del destinatario) ";
     destinatario = validarCedula();
 
@@ -720,11 +718,6 @@ void transferir(string moneda) {
     }
 };
 
-
-//las funciones de aqui hacia arriba todas funcionan correctamente :)
-
-
-
 /**
  * Calcula la fecha actual, esto para las transacciones en la base de datos
  * @param[out] now_tm
@@ -771,10 +764,9 @@ string formatearFecha(tm fecha) {
  * su cédula y guarda los resultados de la transacción en la base de datos.
 */
 void certificadoDP() {
-    int cedula;
-    int meses;
-    double monto, tasaInteres;
-    string moneda, opcion, fechaInicioStr, fechaVencimientoStr;
+    Inversion CDP;
+
+    string opcion;
 
     cout << endl;
     cout << endl;
@@ -783,65 +775,72 @@ void certificadoDP() {
     cout << "********************************" << endl;
 
     cout << "\n(Certificado de deposito a plazo): ";
-    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+    CDP.cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
     cout << "\nPor favor ingresa la cantidad de meses que desea para el CDP: ";
-    cin >> meses;
+    cin >> CDP.meses;
     cout << "\nPor favor ingresa la moneda: ";
-    cin >> moneda;
+    cin >> CDP.moneda;
     cout << "\nPor favor ingrese el monto inicial: ";
-    cin >> monto;
+    cin >> CDP.monto;
 
-    if (0 < meses && meses <= 2) {
-        tasaInteres = 1.05;
+    if (0 < CDP.meses && CDP.meses <= 2) {
+        CDP.tasaInteres = 1.05;
     }
-    else if (3 <= meses && meses < 6) {
-        tasaInteres = 1.25;
+    else if (3 <= CDP.meses && CDP.meses < 6) {
+        CDP.tasaInteres = 1.25;
     }
-    else if (6 <= meses) {
-        tasaInteres = 1.50;
+    else if (6 <= CDP.meses) {
+        CDP.tasaInteres = 1.50;
     }
     else {
         cout << "Meses ingresado no valido." << endl; // Manejar este error
     }
 
     // Calculos de ganancia
-    double tasaMensual = tasaInteres / 12;
-    double gananciaInteres = monto * tasaMensual * meses;
-    double ganancia = gananciaInteres + monto;
+    double tasaMensual = CDP.tasaInteres / 12;
+    double gananciaInteres = CDP.monto * tasaMensual * CDP.meses;
+    double ganancia = gananciaInteres + CDP.monto;
 
     cout << endl;
     cout << endl;
-    cout << "Para " << meses << ", con un monto de " << monto << ", a una tasa de " << tasaInteres << ", va a tener una ganancia de " << ganancia << "." << endl;
+
+    if (!verificarSaldoSuficiente(CDP.cedula, CDP.monto, CDP.moneda)) {
+        return; // Salir de la función si el saldo no es suficiente
+    }
+
+    cout << "Para " << CDP.meses << ", con un monto de " << CDP.monto << ", a una tasa de " << CDP.tasaInteres << ", va a tener una ganancia de " << ganancia << "." << endl;
 
     // Implementar esto por si el usuario quiere cancelar
     // cout << "\n Desea continuar (y/n)? (Este proceso es irreversible)" << endl;
     // cin >> opcion;
 
     std::tm fecha_inicio = calcularFechaActual();
-    std::tm fecha_vencimiento = calcularFechaFinal(fecha_inicio, meses);
+    std::tm fecha_vencimiento = calcularFechaFinal(fecha_inicio, CDP.meses);
 
     // Pasar fechas de formato date a string
-    fechaInicioStr = formatearFecha(fecha_inicio);
-    fechaVencimientoStr = formatearFecha(fecha_vencimiento);
+    CDP.fecha_inicio = formatearFecha(fecha_inicio);
+    CDP.fecha_vencimiento = formatearFecha(fecha_vencimiento);
+
+
 
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO CertificadoDeposito(cedula, monto, moneda, tasaInteres, meses, fecha_inicio, fecha_vencimiento) VALUES (?, ?, ?, ?, ?, ?, ?)"));
 
-    pstmt->setInt(1, cedula);
-    pstmt->setDouble(2, monto);
-    pstmt->setString(3, moneda);
-    pstmt->setDouble(4, tasaInteres);
-    pstmt->setInt(5, meses);
-    pstmt->setString(6, fechaInicioStr);
-    pstmt->setString(7, fechaVencimientoStr);
+    pstmt->setInt(1, CDP.cedula);
+    pstmt->setDouble(2, CDP.monto);
+    pstmt->setString(3, CDP.moneda);
+    pstmt->setDouble(4, CDP.tasaInteres);
+    pstmt->setInt(5, CDP.meses);
+    pstmt->setString(6, CDP.fecha_inicio);
+    pstmt->setString(7, CDP.fecha_vencimiento);
 
     // Actualizar valores de la cuenta del cliente
-    if (moneda == "CRC" || moneda == "crc") {
+    if (CDP.moneda == "CRC" || CDP.moneda == "crc") {
 
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo - ? WHERE cedula = ?"));
 
         // Establece los valores de los par�metros
-        pstmt->setDouble(1, monto); // Restar cantidad del CDP (colones)
-        pstmt->setInt(2, cedula); // C�dula del cliente
+        pstmt->setDouble(1, CDP.monto); // Restar cantidad del CDP (colones)
+        pstmt->setInt(2, CDP.cedula); // C�dula del cliente
         pstmt->executeUpdate();
 
         cout << "Su proceso de CDP (en colones) se ha realizado de forma correcta." << endl;
@@ -849,21 +848,21 @@ void certificadoDP() {
 
         //agregar el registro en colones
 
-        registroColones(cedula, monto, "CDP");
+        registroColones(CDP.cedula, CDP.monto, "CDP");
     }
     else
     {
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo - ? WHERE cedula = ?"));
 
         // Establece los valores de los par�metros
-        pstmt->setDouble(1, monto); // Restar cantidad del CDP (dolares)
-        pstmt->setInt(2, cedula); // C�dula del cliente
+        pstmt->setDouble(1, CDP.monto); // Restar cantidad del CDP (dolares)
+        pstmt->setInt(2, CDP.cedula); // C�dula del cliente
         pstmt->executeUpdate();
 
         cout << "Su proceso de CDP (en dolares) se ha realizado de forma correcta." << endl;
 
         //agregar el registro en Dolares
-        registroDolares(cedula, monto, "CDP");
+        registroDolares(CDP.cedula, CDP.monto, "CDP");
     }
 
     pstmt->executeUpdate();

@@ -105,20 +105,14 @@ float obtenerCuotaDolares(int cedula, string tipo) {
  * @param[in] tipo
 */
 void sacarPrestamo(string moneda, string tipo) {
+
+    Prestamo prestamo;
     cout << endl;
     cout << endl;
     cout << "*********************************" << endl;
     cout << "*********Sacar Prestamo*************" << endl;
     cout << "*********************************" << endl;
 
-    //string moneda;
-    int cedula;//cedula de identidad
-    float cantidad;
-    int periodos;// meses a los que saco el presto
-    float Cuota;//cuota a pagar mensual
-    float saldoPendiente;// saldo que sigue debiendo la persona
-    int cuotasRestantes;//cuota que debe aun por pagar
-    float tasaInteresAnual; //tasa de interes por sacar el prestamo
     bool verificacion;
     //Ademas una columna con el tipo de prestamo
     //creo que lo mejor seria manejar los prestamos en dos tablas colones y dolares
@@ -126,28 +120,27 @@ void sacarPrestamo(string moneda, string tipo) {
     //cout << "\nEn que moneda desea solicitar el prestamo: ";
     //cin >> moneda;
 
-    cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
-    //cout << "Por favor ingresa la cedula: ";
-    //cin >> cedula;
+    prestamo.cedula = validarCedula(); // Solicitar la cedula y verificar que el input sea adecuado
+
     //---------------------------------------------
     //VERIFICACION
     //---------------------------------------------
 
-    verificacion = verificar_un_prestamo(tipo, cedula, moneda);
+    verificacion = verificar_un_prestamo(tipo, prestamo.cedula, moneda);
     if (verificacion == false) {
         cout << "\nPor favor ingresa la cantidad de dinero del prestamo: ";
-        cin >> cantidad;
+        cin >> prestamo.cantidad;
         cout << "\nPor favor ingresa los meses a los cuales sera el prestamo: ";
-        cin >> periodos;
+        cin >> prestamo.periodos;
         cout << "\nPor favor ingresa la tasa interes anual del prestamo: ";
-        cin >> tasaInteresAnual;
+        cin >> prestamo.interesAnual;
 
 
-        tasaInteresAnual = tasaInteresAnual / 100; // para dejarla en terminos de 0 .. 1
+        prestamo.interesAnual = prestamo.interesAnual / 100; // para dejarla en terminos de 0 .. 1
 
         //sacaremos la cuota
 
-        Cuota = cuota(cantidad, tasaInteresAnual, periodos);//ya calculamos la cuota que tienen que pagar con interes fijo
+        prestamo.cuota = cuota(prestamo.cantidad, prestamo.interesAnual, prestamo.periodos);//ya calculamos la cuota que tienen que pagar con interes fijo
 
         //insertaremos dichos datos a la base de datos
 
@@ -158,13 +151,13 @@ void sacarPrestamo(string moneda, string tipo) {
             std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Colones(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
 
             //ingresamos los datos
-            pstmt->setInt(1, cedula); // Ejemplo de c�dula
-            pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
-            pstmt->setInt(3, periodos); // Ejemplo de periodos
-            pstmt->setDouble(4, Cuota); // Ejemplo de cuota
-            pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
-            pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
-            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de inter�s anual
+            pstmt->setInt(1, prestamo.cedula); // Ejemplo de c�dula
+            pstmt->setDouble(2, prestamo.cantidad); // Ejemplo de cantidad
+            pstmt->setInt(3, prestamo.periodos); // Ejemplo de periodos
+            pstmt->setDouble(4, prestamo.cuota); // Ejemplo de cuota
+            pstmt->setDouble(5, prestamo.cantidad); // Ejemplo de saldo pendiente
+            pstmt->setInt(6, prestamo.periodos); // Ejemplo de cuotas restantes
+            pstmt->setDouble(7, prestamo.interesAnual); // Ejemplo de inter�s anual
             pstmt->setString(8, "CRC"); // Ejemplo de moneda
             pstmt->setString(9, tipo); //tipo de prestamo
             //actualizamos la tabla
@@ -176,13 +169,13 @@ void sacarPrestamo(string moneda, string tipo) {
             std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo + ? WHERE cedula = ?"));
 
             // Establece los valores de los par�metros
-            pstmt2->setDouble(1, cantidad); // Nuevo saldo
-            pstmt2->setInt(2, cedula); // C�dula del cliente
+            pstmt2->setDouble(1, prestamo.cantidad); // Nuevo saldo
+            pstmt2->setInt(2, prestamo.cedula); // C�dula del cliente
             pstmt2->executeUpdate();
 
             //registramos la transaccion
 
-            registroColones(cedula, cantidad, "Deposito_Prestamo");
+            registroColones(prestamo.cedula, prestamo.cantidad, "Deposito_Prestamo");
 
             cout << "\n" << endl;
             cout << endl;
@@ -199,13 +192,13 @@ void sacarPrestamo(string moneda, string tipo) {
             std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Dolares(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
 
             //ingresamos los datos
-            pstmt->setInt(1, cedula); // Ejemplo de c�dula
-            pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
-            pstmt->setInt(3, periodos); // Ejemplo de periodos
-            pstmt->setDouble(4, Cuota); // Ejemplo de cuota
-            pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
-            pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
-            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de inter�s anual
+            pstmt->setInt(1, prestamo.cedula); // Ejemplo de c�dula
+            pstmt->setDouble(2, prestamo.cantidad); // Ejemplo de cantidad
+            pstmt->setInt(3, prestamo.periodos); // Ejemplo de periodos
+            pstmt->setDouble(4, prestamo.cuota); // Ejemplo de cuota
+            pstmt->setDouble(5, prestamo.cantidad); // Ejemplo de saldo pendiente
+            pstmt->setInt(6, prestamo.periodos); // Ejemplo de cuotas restantes
+            pstmt->setDouble(7, prestamo.interesAnual); // Ejemplo de inter�s anual
             pstmt->setString(8, "USD"); // Ejemplo de moneda
             pstmt->setString(9, tipo); //tipo de prestamo
             //actualizamos la tabla
@@ -218,13 +211,13 @@ void sacarPrestamo(string moneda, string tipo) {
             std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo + ? WHERE cedula = ?"));
 
             // Establece los valores de los par�metros
-            pstmt2->setDouble(1, cantidad); // Nuevo saldo
-            pstmt2->setInt(2, cedula); // C�dula del cliente
+            pstmt2->setDouble(1, prestamo.cantidad); // Nuevo saldo
+            pstmt2->setInt(2, prestamo.cedula); // C�dula del cliente
             pstmt2->executeUpdate();
 
             //registramos la transaccion
 
-            registroDolares(cedula, cantidad, "Deposito_Prestamo");
+            registroDolares(prestamo.cedula, prestamo.cantidad, "Deposito_Prestamo");
             cout << endl;
             cout << endl;
             cout << "******************************" << endl;
