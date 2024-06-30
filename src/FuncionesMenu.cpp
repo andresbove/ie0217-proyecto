@@ -1,5 +1,12 @@
+/**
+ * @file FuncionesMenu.hpp
+ * Aqui es donde est√°n definidas las funciones para el manejo del men√∫.
+*/
 #include "header.hpp"
 
+/**
+ * Encargado del men√∫ inicial.
+*/
 void menuPrincipal() {
     int opcion;
     do {
@@ -46,7 +53,9 @@ void menuPrincipal() {
 
 }
 
-
+/**
+ * Encargado del men√∫ de transacciones.
+*/
 void menuAtencionCliente() {
     int opcion;
     do {
@@ -118,7 +127,9 @@ void menuAtencionCliente() {
 }
 
 
-
+/**
+ * Encargado del men√∫ del tipo de pr√©stamo.
+*/
 void menuSacarPrestamo() {
     int opcion;
     do {
@@ -164,6 +175,9 @@ void menuSacarPrestamo() {
     } while (opcion != 4);
 }
 
+/**
+ * Encargado del men√∫ de sacar pr√©stamos.
+*/
 void subMenuSacarPrestamo(const string& tipoPrestamo) {
     int opcion;
     do {
@@ -185,12 +199,12 @@ void subMenuSacarPrestamo(const string& tipoPrestamo) {
             switch (opcion) {
             case 1:
                 cout << "Ha seleccionado sacar prestamo " << tipoPrestamo << " en Dolares." << endl;
-                // LÛgica para sacar prÈstamo especÌfico en dÛlares
+                // LÔøΩgica para sacar prÔøΩstamo especÔøΩfico en dÔøΩlares
                 sacarPrestamo("USD", tipoPrestamo);
                 break;
             case 2:
                 cout << "Ha seleccionado sacar prestamo " << tipoPrestamo << " en Colones." << endl;
-                // LÛgica para sacar prÈstamo especÌfico en colones
+                // LÔøΩgica para sacar prÔøΩstamo especÔøΩfico en colones
                 sacarPrestamo("CRC", tipoPrestamo);
                 break;
             case 3:
@@ -209,6 +223,9 @@ void subMenuSacarPrestamo(const string& tipoPrestamo) {
     } while (opcion != 3);
 }
 
+/**
+ * Menu para poder pagar pr√©stamos ya sea en CRC o USD.
+*/
 void menuPagarPrestamo() {
     int opcion;
     string tipo;
@@ -237,7 +254,7 @@ void menuPagarPrestamo() {
                 toUpperCase(tipo);
                 cout << endl;
 
-                // LÛgica para pagar prÈstamo en dÛlares
+                // LÔøΩgica para pagar prÔøΩstamo en dÔøΩlares
                 pagarPrestamoDolares(tipo);
 
                 break;
@@ -247,7 +264,7 @@ void menuPagarPrestamo() {
                 cout << "Que tipo de prestamo quieres pagar: ";
                 cin >> tipo;
                 toUpperCase(tipo);
-                // LÛgica para pagar prÈstamo en colones
+                // LÔøΩgica para pagar prÔøΩstamo en colones
                 pagarPrestamoColones(tipo);
                 break;
             case 3:
@@ -266,6 +283,9 @@ void menuPagarPrestamo() {
     } while (opcion != 3);
 }
 
+/**
+ * Menu para generar informes .txt.
+*/
 void menuGenerarInforme() {
     int opcion;
     do {
@@ -312,6 +332,9 @@ void menuGenerarInforme() {
     } while (opcion != 3);
 }
 
+/**
+ * Encargado del men√∫ para poder realizar dep√≥sitos.
+*/
 void menuDepositar() {
     int opcion;
     do {
@@ -333,12 +356,12 @@ void menuDepositar() {
             switch (opcion) {
             case 1:
                 cout << "Ha seleccionado depositar en Dolares." << endl;
-                // LÛgica para depositar en dÛlares
+                // LÔøΩgica para depositar en dÔøΩlares
                 depositar("USD");
                 break;
             case 2:
                 cout << "Ha seleccionado depositar en Colones." << endl;
-                // LÛgica para depositar en colones
+                // LÔøΩgica para depositar en colones
                 depositar("CRC");
                 break;
             case 3:
@@ -357,6 +380,9 @@ void menuDepositar() {
     } while (opcion != 3);
 }
 
+/**
+ * Menu de transferencias.
+*/
 void menuTransferir() {
     int opcion;
     do {
@@ -378,12 +404,12 @@ void menuTransferir() {
             switch (opcion) {
             case 1:
                 cout << "Ha seleccionado transferir en Dolares." << endl;
-                // LÛgica para transferir en dÛlares
+                // LÔøΩgica para transferir en dÔøΩlares
                 transferir("USD");
                 break;
             case 2:
                 cout << "Ha seleccionado transferir en Colones." << endl;
-                // LÛgica para transferir en colones
+                // LÔøΩgica para transferir en colones
                 transferir("CRC");
                 break;
             case 3:
@@ -402,6 +428,9 @@ void menuTransferir() {
     } while (opcion != 3);
 }
 
+/**
+ * Menu de retiros.
+*/
 void menuRetirar() {
     int opcion;
     do {
@@ -423,12 +452,12 @@ void menuRetirar() {
             switch (opcion) {
             case 1:
                 cout << "Ha seleccionado retirar en Dolares." << endl;
-                // LÛgica para retirar en dÛlares
+                // LÔøΩgica para retirar en dÔøΩlares
                 retirar("USD");
                 break;
             case 2:
                 cout << "Ha seleccionado retirar en Colones." << endl;
-                // LÛgica para retirar en colones
+                // LÔøΩgica para retirar en colones
                 retirar("CRC");
                 break;
             case 3:
@@ -447,6 +476,9 @@ void menuRetirar() {
     } while (opcion != 3);
 }
 
+/**
+ * Menu para ver informaci√≥n acerca de los pr√©stamos del cliente.
+*/
 void menuInformacionPrestamos() {
     int opcion;
     do {
@@ -470,11 +502,11 @@ void menuInformacionPrestamos() {
             case 1:
                 cout << "Ha seleccionado Prestamo Personal." << endl;
                 generarInformePrestamo("PERSONAL");
-                // LÛgica para informaciÛn de prÈstamo personal
+                // LÔøΩgica para informaciÔøΩn de prÔøΩstamo personal
                 break;
             case 2:
                 cout << "Ha seleccionado Prestamo Prendario." << endl;
-                // LÛgica para informaciÛn de prÈstamo prendario
+                // LÔøΩgica para informaciÔøΩn de prÔøΩstamo prendario
                 generarInformePrestamo("PRENDARIO");
                 break;
             case 3:

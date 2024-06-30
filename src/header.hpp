@@ -1,6 +1,6 @@
 ﻿/**
- * @file functions.hpp
- * Aqui es donde van las definiciones de las funciones y ademas, el manejo de la base de datos.
+ * @file header.hpp
+ * Aqui es donde van los prototipos de las funciones.
 */
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP

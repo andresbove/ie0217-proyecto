@@ -1,9 +1,11 @@
+/**
+ * @file FuncionesPrestamos.hpp
+ * Aqui es donde estÃ¡n definidas las funciones para el manejo de los prÃ©stamos.
+*/
 #include "header.hpp"
 
-//funciones para los prestamos
-
 /**
- * Calcula el interés simple a la hora de sacar un préstamo.
+ * Calcula el interï¿½s simple a la hora de sacar un prï¿½stamo.
  * @param[in] cantidadInicial
  * @param[in] years
  * @param[in] interesAnual
@@ -16,7 +18,7 @@ float calcularInteresSimple(float cantidadInicial, int years, float interesAnual
 
 
 /**
- * Encargado de calcular las cuotas a pagar por sacar un préstamo.
+ * Encargado de calcular las cuotas a pagar por sacar un prï¿½stamo.
  * @param[in] cantidadInicial
  * @param[in] interesAnual
  * @param[in] periodos
@@ -30,7 +32,7 @@ float cuota(float cantidadInicial, float interesAnual, int periodos) {
 
 
 /**
- * Realiza consultas de la cuota del préstamo en colones.
+ * Realiza consultas de la cuota del prï¿½stamo en colones.
  * @param[in] cedula
  * @param[in] tipo
  * @param[out] couta
@@ -39,8 +41,8 @@ float obtenerCuotaColones(int cedula, string tipo) {
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Colones WHERE cedula=? AND tipo=?"));
 
 
-    pstmt->setInt(1, cedula); // Cédula específica
-    pstmt->setString(2, tipo); // Tipo específico
+    pstmt->setInt(1, cedula); // Cï¿½dula especï¿½fica
+    pstmt->setString(2, tipo); // Tipo especï¿½fico
 
     // Ejecutar la consulta
     res = pstmt->executeQuery();
@@ -62,7 +64,7 @@ float obtenerCuotaColones(int cedula, string tipo) {
 
 
 /**
- * Realiza consultas de la cuota del préstamo en dólares.
+ * Realiza consultas de la cuota del prï¿½stamo en dï¿½lares.
  * @param[in] cedula
  * @param[in] tipo
  * @param[out] couta
@@ -72,8 +74,8 @@ float obtenerCuotaDolares(int cedula, string tipo) {
     std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("SELECT cuota FROM prestamo_Dolares WHERE cedula=? AND tipo=?"));
 
 
-    pstmt->setInt(1, cedula); // Cédula específica
-    pstmt->setString(2, tipo); // Tipo específico
+    pstmt->setInt(1, cedula); // Cï¿½dula especï¿½fica
+    pstmt->setString(2, tipo); // Tipo especï¿½fico
 
     // Ejecutar la consulta
     res = pstmt->executeQuery();
@@ -97,7 +99,7 @@ float obtenerCuotaDolares(int cedula, string tipo) {
 //crear un prestamo
 //segun lo de arriba creemos que ya es suficiente para saber que prestamos iremos a sacar
 /**
- * Permite el usuario sacar un préstamo, para ello se le solicita le cédula y después se hacen los cálculos correspondientes
+ * Permite el usuario sacar un prï¿½stamo, para ello se le solicita le cï¿½dula y despuï¿½s se hacen los cï¿½lculos correspondientes
  * y se guarda en la base de datos.
  * @param[in] moneda
  * @param[in] tipo
@@ -156,13 +158,13 @@ void sacarPrestamo(string moneda, string tipo) {
             std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Colones(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
 
             //ingresamos los datos
-            pstmt->setInt(1, cedula); // Ejemplo de cédula
+            pstmt->setInt(1, cedula); // Ejemplo de cï¿½dula
             pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
             pstmt->setInt(3, periodos); // Ejemplo de periodos
             pstmt->setDouble(4, Cuota); // Ejemplo de cuota
             pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
             pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
-            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interés anual
+            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interï¿½s anual
             pstmt->setString(8, "CRC"); // Ejemplo de moneda
             pstmt->setString(9, tipo); //tipo de prestamo
             //actualizamos la tabla
@@ -170,12 +172,12 @@ void sacarPrestamo(string moneda, string tipo) {
 
             //nos falta agregar esa cantidad de plata a nuestras cuentas ojo
 
-            // Prepara una declaración para actualizar el saldo
+            // Prepara una declaraciï¿½n para actualizar el saldo
             std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo + ? WHERE cedula = ?"));
 
-            // Establece los valores de los parámetros
+            // Establece los valores de los parï¿½metros
             pstmt2->setDouble(1, cantidad); // Nuevo saldo
-            pstmt2->setInt(2, cedula); // Cédula del cliente
+            pstmt2->setInt(2, cedula); // Cï¿½dula del cliente
             pstmt2->executeUpdate();
 
             //registramos la transaccion
@@ -197,13 +199,13 @@ void sacarPrestamo(string moneda, string tipo) {
             std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO prestamo_Dolares(cedula, cantidad, periodos, cuota, saldoPendiente, cuotasRestantes, interesAnual, moneda,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)"));
 
             //ingresamos los datos
-            pstmt->setInt(1, cedula); // Ejemplo de cédula
+            pstmt->setInt(1, cedula); // Ejemplo de cï¿½dula
             pstmt->setDouble(2, cantidad); // Ejemplo de cantidad
             pstmt->setInt(3, periodos); // Ejemplo de periodos
             pstmt->setDouble(4, Cuota); // Ejemplo de cuota
             pstmt->setDouble(5, cantidad); // Ejemplo de saldo pendiente
             pstmt->setInt(6, periodos); // Ejemplo de cuotas restantes
-            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interés anual
+            pstmt->setDouble(7, tasaInteresAnual); // Ejemplo de interï¿½s anual
             pstmt->setString(8, "USD"); // Ejemplo de moneda
             pstmt->setString(9, tipo); //tipo de prestamo
             //actualizamos la tabla
@@ -212,12 +214,12 @@ void sacarPrestamo(string moneda, string tipo) {
 
 
 
-            // Prepara una declaración para actualizar el saldo
+            // Prepara una declaraciï¿½n para actualizar el saldo
             std::unique_ptr<sql::PreparedStatement> pstmt2(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo + ? WHERE cedula = ?"));
 
-            // Establece los valores de los parámetros
+            // Establece los valores de los parï¿½metros
             pstmt2->setDouble(1, cantidad); // Nuevo saldo
-            pstmt2->setInt(2, cedula); // Cédula del cliente
+            pstmt2->setInt(2, cedula); // Cï¿½dula del cliente
             pstmt2->executeUpdate();
 
             //registramos la transaccion
@@ -249,7 +251,7 @@ void sacarPrestamo(string moneda, string tipo) {
 //Ademas manejo de excepciones por aca si el usuario no tiene mas fondos para poder pagarlos
 
 /**
- * Permite el usuario pueda hacer un pago del préstamo en colones, para ello se le solicita le cédula y después se hacen los cálculos correspondientes
+ * Permite el usuario pueda hacer un pago del prï¿½stamo en colones, para ello se le solicita le cï¿½dula y despuï¿½s se hacen los cï¿½lculos correspondientes
  * y se guarda en la base de datos.
  * @param[in] tipo
 */
@@ -285,8 +287,8 @@ void pagarPrestamoColones(string tipo) {
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE prestamo_Colones SET saldoPendiente = saldoPendiente - cuota , cuotasRestantes = cuotasRestantes -1  WHERE cedula = ? AND tipo = ?"));
 
 
-        pstmt->setInt(1, cedula); // Cédula específica
-        pstmt->setString(2, tipo); // Tipo específico
+        pstmt->setInt(1, cedula); // Cï¿½dula especï¿½fica
+        pstmt->setString(2, tipo); // Tipo especï¿½fico
         pstmt->executeUpdate();//actualizamos
 
         cout << "\n";
@@ -324,12 +326,12 @@ void pagarPrestamoColones(string tipo) {
             //introducir funcion de Andres
             
             if (!verificarSaldoSuficiente(cedula, cuotaRebajo, "CRC")) {
-                return; // Salir de la función si el saldo no es suficiente
+                return; // Salir de la funciï¿½n si el saldo no es suficiente
             }
             std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaColones SET saldo = saldo - ? WHERE cedula = ?"));
 
 
-            // Establece los valores de los parámetros
+            // Establece los valores de los parï¿½metros
             pstmt->setDouble(1, cuotaRebajo); // lo que le vamos a restar del saldo
             pstmt->setInt(2, cedula); // cedula de la persona
             pstmt->executeUpdate();
@@ -346,8 +348,8 @@ void pagarPrestamoColones(string tipo) {
             //las condiciones para hacer el update
             pstmt2->setDouble(1, cuotaRebajo);
             pstmt2->setDouble(2, cantidadCuotas);
-            pstmt2->setInt(3, cedula); // Cédula específica
-            pstmt2->setString(4, tipo); // Tipo específico
+            pstmt2->setInt(3, cedula); // Cï¿½dula especï¿½fica
+            pstmt2->setString(4, tipo); // Tipo especï¿½fico
             pstmt2->executeUpdate();//actualizamos
             cout << endl;
             cout << "Pago Realizado con exito ..." << endl;
@@ -367,8 +369,8 @@ void pagarPrestamoColones(string tipo) {
             //las condiciones para hacer el update
             pstmt2->setDouble(1, cuotaRebajo*cantidadCuotas);
             pstmt2->setDouble(2, cantidadCuotas);
-            pstmt2->setInt(3, cedula); // Cédula específica
-            pstmt2->setString(4, tipo); // Tipo específico
+            pstmt2->setInt(3, cedula); // Cï¿½dula especï¿½fica
+            pstmt2->setString(4, tipo); // Tipo especï¿½fico
             pstmt2->executeUpdate();//actualizamos
             cout << endl;
             cout << "Pago Realizado con exito ..." << endl;
@@ -381,7 +383,7 @@ void pagarPrestamoColones(string tipo) {
 
 
 /**
- * Permite el usuario pueda hacer un pago del préstamo en dolares, para ello se le solicita le cédula y después se hacen los cálculos correspondientes
+ * Permite el usuario pueda hacer un pago del prï¿½stamo en dolares, para ello se le solicita le cï¿½dula y despuï¿½s se hacen los cï¿½lculos correspondientes
  * y se guarda en la base de datos.
  * @param[in] tipo
 */
@@ -417,8 +419,8 @@ void pagarPrestamoDolares(string tipo) {
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE prestamo_Dolares SET saldoPendiente = saldoPendiente - cuota , cuotasRestantes = cuotasRestantes -1  WHERE cedula = ? AND tipo = ?"));
 
 
-        pstmt->setInt(1, cedula); // Cédula específica
-        pstmt->setString(2, tipo); // Tipo específico
+        pstmt->setInt(1, cedula); // Cï¿½dula especï¿½fica
+        pstmt->setString(2, tipo); // Tipo especï¿½fico
         pstmt->executeUpdate();//actualizamos
 
         cout << "\n";
@@ -457,12 +459,12 @@ void pagarPrestamoDolares(string tipo) {
             //introducir funcion de Andres
 
             if (!verificarSaldoSuficiente(cedula, cuotaRebajo, "USD")) {
-                return; // Salir de la función si el saldo no es suficiente
+                return; // Salir de la funciï¿½n si el saldo no es suficiente
             }
             std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("UPDATE cuentaDolares SET saldo = saldo - ? WHERE cedula = ?"));
 
 
-            // Establece los valores de los parámetros
+            // Establece los valores de los parï¿½metros
             pstmt->setDouble(1, cuotaRebajo); // lo que le vamos a restar del saldo
             pstmt->setInt(2, cedula); // cedula de la persona
             pstmt->executeUpdate();
@@ -479,8 +481,8 @@ void pagarPrestamoDolares(string tipo) {
             //las condiciones para hacer el update
             pstmt2->setDouble(1, cuotaRebajo);
             pstmt2->setDouble(2, cantidadCuotas);
-            pstmt2->setInt(3, cedula); // Cédula específica
-            pstmt2->setString(4, tipo); // Tipo específico
+            pstmt2->setInt(3, cedula); // Cï¿½dula especï¿½fica
+            pstmt2->setString(4, tipo); // Tipo especï¿½fico
             pstmt2->executeUpdate();//actualizamos
             cout << endl;
             cout << "Pago Realizado con exito ..." << endl;
@@ -500,8 +502,8 @@ void pagarPrestamoDolares(string tipo) {
             //las condiciones para hacer el update
             pstmt2->setDouble(1, cuotaRebajo * cantidadCuotas);
             pstmt2->setDouble(2, cantidadCuotas);
-            pstmt2->setInt(3, cedula); // Cédula específica
-            pstmt2->setString(4, tipo); // Tipo específico
+            pstmt2->setInt(3, cedula); // Cï¿½dula especï¿½fica
+            pstmt2->setString(4, tipo); // Tipo especï¿½fico
             pstmt2->executeUpdate();//actualizamos
             cout << endl;
             cout << "Pago Realizado con exito ..." << endl;
@@ -514,8 +516,8 @@ void pagarPrestamoDolares(string tipo) {
 
 
 /**
- * Genera un informe de las transacciones que ha tenido el usuario basado en la cédula ingresada
- * y también la moneda (ya que puede tener cuenta en colones o dólares)
+ * Genera un informe de las transacciones que ha tenido el usuario basado en la cï¿½dula ingresada
+ * y tambiï¿½n la moneda (ya que puede tener cuenta en colones o dï¿½lares)
  * @param[in] moneda
 */
 void generarInforme(string moneda) {
@@ -550,7 +552,7 @@ void generarInforme(string moneda) {
             res = pstmt->executeQuery();
         }
 
-        // Verificar si la cédula existe en la base de datos
+        // Verificar si la cï¿½dula existe en la base de datos
         if (!res->next()) {
             cerr << "Error: La cedula ingresada no existe en la base de datos." << endl;
             return;
@@ -609,8 +611,8 @@ void generarInforme(string moneda) {
 
 
 /**
- * Genera un informe de los préstamos del cliente (puede ser PRENDARIO, HIPOTECARIO o PERSONAL) basado en la cédula ingresada y también
- * la moneda (ya que puede tener cuenta en colones o dólares)
+ * Genera un informe de los prï¿½stamos del cliente (puede ser PRENDARIO, HIPOTECARIO o PERSONAL) basado en la cï¿½dula ingresada y tambiï¿½n
+ * la moneda (ya que puede tener cuenta en colones o dï¿½lares)
  * @param[in] tipo
 */
 void generarInformePrestamo(string tipo) {

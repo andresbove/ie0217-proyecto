@@ -1,42 +1,63 @@
-﻿#include "header.hpp"
+﻿/**
+ * @file FuncionesGenerales.hpp
+ * Aqui es donde están definidas las funciones a utilizar que no sean del menu y tampoco de los préstamos.
+*/
+#include "header.hpp"
 
 /**
- * Funcion para validar la cédula ingresada por el usuario, que se espera que sean ints, ademas verifica que la
- * cedula esté en la base de datos (por esto no usar en crearUsuario).
+ * Transforma el case de un string a todo mayúscula.
+ * @param[in] palabra
 */
-
-
 void toUpperCase(string& palabra) {
     transform(palabra.begin(), palabra.end(), palabra.begin(), [](unsigned char c) {return toupper(c);});
 }
 
-// Para verificar que lo ingresado son letras
+/**
+ * Para verificar que lo ingresado son letras y no números.
+ * @param[in] str
+*/
 bool validarLetras(const string& str) {
     return regex_match(str, regex("^[A-Za-z]+$"));
 }
 
-// Para verificar que lo ingresado son digitos
+/**
+ * Para verificar que lo ingresado son digitos y no letras.
+ * @param[in] str
+*/
 bool validarDigitos(const string& str) {
     return regex_match(str, regex("^[0-9]+$"));
 }
 
-// Validar float ingresado por el usuario
+/**
+ * Para verificar que lo ingresado son float y no letras.
+ * @param[in] str
+*/
 bool validarFloat(const string& str) {
     regex floatRegex(R"([0-9]*\.?[0-9]+)"); // Recuerde que por ser float siempre va a ser #.#
     return regex_match(str, floatRegex);
 }
 
-// Verificar correro
+/**
+ * Para verificar que lo ingresado cumple con los requisitos de un correo electrónico.
+ * @param[in] str
+*/
 bool validarCorreo(const string& str) {
     return regex_match(str, regex(R"(^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$)"));
 }
 
-// Convertir de string a float
+/**
+ * Para convertir de string a float
+ * @param[in] str
+*/
 float stringToFloat(const string& str) {
     return stof(str);
 }
 
-
+/**
+ * Funcion para validar la cédula ingresada por el usuario, que se espera que sean ints, ademas verifica que la
+ * cedula esté en la base de datos, por esto es que no se usa en crearUsuario, porque no se requiere una cedula
+ * existente en este caso.
+*/
 int validarCedula() {
     int cedula;
     string cedulaString;
@@ -77,6 +98,12 @@ int validarCedula() {
     } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
 }
 
+
+
+/**
+ * Determina si lo ingresado es un número.
+ * @param[out] numero
+*/
 int validarNumero() {
     int numero;
     string cantidadCuotasString;
@@ -101,6 +128,8 @@ int validarNumero() {
     } while (true); // Continúa pidiendo cedula hasta que una válida sea ingresada
 }
 
+
+
 /**
  * Encargado de insertar los datos relacionados a la tabla de registroColones.
  * @param[in] cedula
@@ -120,6 +149,7 @@ void registroColones(int cedula, float cantidad, string estado) {
 }
 
 
+
 /**
  * Encargado de insertar los datos relacionados a la tabla de registroDolares.
  * @param[in] cedula
@@ -137,6 +167,7 @@ void registroDolares(int cedula, float cantidad, string estado) {
     // Ejecuta la declaración
     pstmt->executeUpdate();
 }
+
 
 
 /**
@@ -216,9 +247,9 @@ bool verificarSaldotransferencia(int cedula, float monto, const string& moneda) 
 
 
 
-
 /**
  * Determina si el saldo ingresado por el usuario es válido, es decir, que no ingrese letras o símbolos, solo números.
+ * @param[out] saldo
 */
 float validarSaldo() {
     float saldo;
@@ -531,8 +562,6 @@ void depositar(string moneda) {
     {
         registroDolares(cedula, deposito, "DEPOSITO");
     }
-
-
 };
 
 
@@ -932,7 +961,12 @@ bool verificar_un_cuenta(int cedula, string moneda) {
     return salida;
 }
 
-//por ejemplo pagar un prestamo en dolares con colones
+/**
+ * Realiza la conversión de dólares a colones para poder realizar pagos de cuentas de diferentes monedas.
+ * @param[in] cuota
+ * @param[in] cedula
+ * @param[in] cantidad
+*/
 void convertir_usd_to_crc_pago(float cuota, int cedula, int cantidad) {
     //tenemos que hacer primero la conversion y luego el rebajo de la cuenta en dolares
     //ademas tenemos que bajarle una cuota al del prestamo
@@ -960,7 +994,12 @@ void convertir_usd_to_crc_pago(float cuota, int cedula, int cantidad) {
     registroColones(cedula, conversion, "PAGO_PRESTAMO");
 }
 
-//por ejemplo pagar un prestamo en colones con dolares
+/**
+ * Realiza la conversión de colones a dólares para poder realizar pagos de cuentas de diferentes monedas.
+ * @param[in] cuota
+ * @param[in] cedula
+ * @param[in] cantidad
+*/
 void convertir_crc_to_usd_pago(float cuota, int cedula, int cantidad) {
     //tenemos que hacer primero la conversion y luego el rebajo de la cuenta en dolares
     //ademas tenemos que bajarle una cuota al del prestamo
