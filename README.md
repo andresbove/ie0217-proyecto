@@ -7,6 +7,9 @@ Andres Bonilla Vega B81220
 
 Kevin Campos Castro B91519
 
+# Documentación
+En la carpeta de doxygen se encuentran todos los archivos generados por este programa, lo cual, es la documentación del trabajo. Para abrirlo puede abrir el documento `index.html` en su navegador teniendo los otros archivos descargados.
+
 # Investigación
 # Préstamo personal
 
